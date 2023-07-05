@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     # Add social providers
     "allauth.socialaccount.providers.google",
     "accounts",
+    "api",
 ]
 
 AUTH_USER_MODEL = "accounts.User"
