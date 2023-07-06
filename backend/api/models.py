@@ -3,7 +3,6 @@ from django.db import models
 from accounts.models import User
 from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
-from rest_framework.exceptions import ValidationError
 
 
 class Category(models.Model):
@@ -78,15 +77,28 @@ class Choice(models.Model):
 class ScoreRecord(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name="records")
-    player = models.ForeignKey(
+    player_verified = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="records", null=True, blank=True
     )
-    player_nickname = models.CharField(max_length=24)
-    score = models.PositiveSmallIntegerField(
+    player_unverified = models.CharField(max_length=24, null=True, blank=True)
+    score = models.PositiveSmallIntegerField()
+    percentage = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(0), MaxValueValidator(100)]
     )
     date_played = models.DateTimeField(default=timezone.now)
     notes = models.CharField(max_length=256, blank=True, null=True)
 
+    def save(self, *args, **kwargs):
+        total_questions = self.quiz.questions.count()
+        if total_questions > 0:
+            self.percentage = (self.score / total_questions) * 100
+        else:
+            self.percentage = 0
+
+        if self.player_verified is not None:
+            self.player_unverified = None
+
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"{self.player_nickname} - {self.score} - {self.date_played}"
+        return f"{self.player_unverified | self.player_verified} - {self.score} - {self.date_played}"

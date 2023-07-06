@@ -1,13 +1,13 @@
 from rest_framework.serializers import ModelSerializer
-from accounts.models import User
-from .models import Category, Quiz, Question, Choice
 from rest_framework import serializers
+from accounts.models import User
+from .models import Category, Quiz, Question, Choice, ScoreRecord
 
 
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ["id", "email", "first_name", "last_name"]
+        fields = ["id", "email", "first_name", "last_name", "nickname"]
 
 
 class CategorySerializer(ModelSerializer):
@@ -50,3 +50,39 @@ class ChoiceSerializer(ModelSerializer):
             )
 
         return super().create(validated_data)
+
+
+class ScoreRecordSerializer(ModelSerializer):
+    player_verified = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), required=False
+    )
+    notes = serializers.SerializerMethodField()
+    percentage = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = ScoreRecord
+        fields = "__all__"
+
+    def get_notes(self, obj):
+        total_questions = obj.quiz.questions.count()
+        return f"{obj.score} out of {total_questions}"
+
+    def validate(self, data):
+        player_verified = data.get("player_verified")
+        player_unverified = data.get("player_unverified")
+
+        if player_verified is None and not player_unverified:
+            raise serializers.ValidationError(
+                {"player_unverified": "Nickname is required when player is unverified."}
+            )
+
+        return data
+
+
+class QuizScoreRecordSerializer(ModelSerializer):
+    player_verified = UserSerializer()
+
+    class Meta:
+        model = ScoreRecord
+        fields = "__all__"
+        depth = 1

@@ -1,12 +1,14 @@
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from accounts.models import User
-from .models import Category, Quiz, Question, Choice
+from .models import Category, Quiz, Question, Choice, ScoreRecord
 from .serializers import (
     CategorySerializer,
     QuizSerializer,
     UserSerializer,
     QuestionSerializer,
     ChoiceSerializer,
+    ScoreRecordSerializer,
+    QuizScoreRecordSerializer,
 )
 from rest_framework import status
 from rest_framework.response import Response
@@ -57,3 +59,17 @@ class QuestionChoicesViewSet(ReadOnlyModelViewSet):
         question_id = self.kwargs["question_id"]
         question = Question.objects.get(id=question_id)
         return Choice.objects.filter(question=question)
+
+
+class ScoreRecordViewSet(ModelViewSet):
+    queryset = ScoreRecord.objects.all()
+    serializer_class = ScoreRecordSerializer
+
+
+class QuizScoreRecordsViewSet(ReadOnlyModelViewSet):
+    serializer_class = QuizScoreRecordSerializer
+
+    def get_queryset(self):
+        quiz_id = self.kwargs["quiz_id"]
+        quiz = Quiz.objects.get(id=quiz_id)
+        return ScoreRecord.objects.filter(quiz=quiz)

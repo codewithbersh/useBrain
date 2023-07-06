@@ -6,6 +6,8 @@ from .views import (
     QuestionViewSet,
     ChoicesViewSet,
     QuestionChoicesViewSet,
+    ScoreRecordViewSet,
+    QuizScoreRecordsViewSet,
 )
 
 
@@ -20,4 +22,10 @@ router.register(
     QuestionChoicesViewSet,
     basename="question-choices",
 )
+router.register(
+    r"quizzes/(?P<quiz_id>[0-9a-f-]+)/score-records",
+    QuizScoreRecordsViewSet,
+    basename="question-choices",
+)
+router.register(r"score-records", ScoreRecordViewSet, basename="score-record")
 urlpatterns = router.urls
