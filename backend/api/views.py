@@ -28,6 +28,19 @@ class QuizViewSet(ModelViewSet):
     queryset = Quiz.objects.all()
     serializer_class = QuizSerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.code:
+            request_code = request.query_params.get("code")
+            if not request_code or request_code != instance.code:
+                return Response(
+                    {"detail": "Invalid code."}, status=status.HTTP_403_FORBIDDEN
+                )
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
 
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
