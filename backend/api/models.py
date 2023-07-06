@@ -101,4 +101,9 @@ class ScoreRecord(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.player_unverified | self.player_verified} - {self.score} - {self.date_played}"
+        if self.player_verified is not None:
+            return (
+                f"{self.player_verified.nickname} - {self.score} - {self.date_played}"
+            )
+        else:
+            return f"{self.player_unverified} - {self.score} - {self.date_played}"
