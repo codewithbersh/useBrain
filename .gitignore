@@ -1,2 +1,3 @@
 venv
 backend/backend/.env
+frontend/.env
