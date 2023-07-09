@@ -19,11 +19,15 @@ class CategorySerializer(ModelSerializer):
 class QuizSerializer(ModelSerializer):
     owner = UserSerializer()
     category = CategorySerializer()
+    questions_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Quiz
         fields = "__all__"
         depth = 1
+
+    def get_questions_count(self, obj):
+        return obj.questions.count()
 
 
 class QuestionSerializer(ModelSerializer):

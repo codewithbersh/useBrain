@@ -8,6 +8,7 @@ from .views import (
     QuestionChoicesViewSet,
     ScoreRecordViewSet,
     QuizScoreRecordsViewSet,
+    LandingPageQuizViewSet,
 )
 
 
@@ -15,6 +16,7 @@ router = DefaultRouter()
 router.register(r"users", UserViewSet, basename="user")
 router.register(r"categories", CategoryViewSet, basename="category")
 router.register(r"quizzes", QuizViewSet, basename="quiz")
+router.register(r"landing-page-quizzes", LandingPageQuizViewSet, basename="quiz")
 router.register(r"questions", QuestionViewSet, basename="question")
 router.register(r"choices", ChoicesViewSet, basename="choice")
 router.register(

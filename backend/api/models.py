@@ -17,9 +17,9 @@ class Category(models.Model):
 
 class Quiz(models.Model):
     DIFFICULTY_CHOICES = [
-        ("easy", "Easy"),
-        ("medium", "Medium"),
-        ("hard", "Hard"),
+        ("Easy", "Easy"),
+        ("Medium", "Medium"),
+        ("Hard", "Hard"),
     ]
     PRIVACY_CHOICES = [
         ("PUB", "public"),

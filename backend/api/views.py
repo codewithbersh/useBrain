@@ -12,6 +12,7 @@ from .serializers import (
 )
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.filters import OrderingFilter
 
 
 class UserViewSet(ModelViewSet):
@@ -25,8 +26,39 @@ class CategoryViewSet(ModelViewSet):
 
 
 class QuizViewSet(ModelViewSet):
-    queryset = Quiz.objects.all()
+    queryset = Quiz.objects.all()[:2]
     serializer_class = QuizSerializer
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.code:
+            request_code = request.query_params.get("code")
+            if not request_code or request_code != instance.code:
+                return Response(
+                    {"detail": "Invalid code."}, status=status.HTTP_403_FORBIDDEN
+                )
+
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+class LandingPageQuizViewSet(ModelViewSet):
+    serializer_class = QuizSerializer
+    filter_backends = [OrderingFilter]
+    ordering_fields = ["times_played", "created"]
+
+    def get_queryset(self):
+        return Quiz.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        limit = 4
+        limited_queryset = queryset[:limit]
+
+        serializer = self.get_serializer(limited_queryset, many=True)
+        return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
