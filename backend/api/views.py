@@ -13,11 +13,17 @@ from .serializers import (
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.filters import OrderingFilter
+from rest_framework import exceptions
 
 
 class UserViewSet(ModelViewSet):
-    queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return User.objects.filter(pk=user.id)
+        raise exceptions.AuthenticationFailed()
 
 
 class CategoryViewSet(ModelViewSet):
