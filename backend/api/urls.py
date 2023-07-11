@@ -1,4 +1,5 @@
 from rest_framework.routers import DefaultRouter
+
 from .views import (
     CategoryViewSet,
     QuizViewSet,
@@ -9,6 +10,7 @@ from .views import (
     ScoreRecordViewSet,
     QuizScoreRecordsViewSet,
     LandingPageQuizViewSet,
+    QuizQuestionsViewSet,
 )
 
 
@@ -27,7 +29,13 @@ router.register(
 router.register(
     r"quizzes/(?P<quiz_id>[0-9a-f-]+)/score-records",
     QuizScoreRecordsViewSet,
-    basename="question-choices",
+    basename="quiz-score-records",
+)
+router.register(
+    r"quizzes/(?P<quiz_id>[0-9a-f-]+)/questions",
+    QuizQuestionsViewSet,
+    basename="quiz-questions",
 )
 router.register(r"score-records", ScoreRecordViewSet, basename="score-record")
+
 urlpatterns = router.urls

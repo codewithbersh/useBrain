@@ -1,7 +1,6 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import React from "react";
+import { QuizGame } from "@/components/quiz-game";
+import { Question } from "@/types";
 
 interface PlayPageProps {
   params: {
@@ -9,11 +8,26 @@ interface PlayPageProps {
   };
 }
 
-const PlayPage = ({ params }: PlayPageProps) => {
-  const [nickname, setNickname] = React.useState(null);
-  const { data: session } = useSession();
-  console.log("Session: ", session);
-  return <div className="container"></div>;
+async function getQuestions(quizId: string): Promise<Array<Question>> {
+  const res = await fetch(
+    `http://127.0.0.1:8000/api/quizzes/${quizId}/questions/`,
+    { next: { revalidate: 0 } }
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+}
+
+const PlayPage = async ({ params }: PlayPageProps) => {
+  const questions = await getQuestions(params.id);
+  return (
+    <div className="container">
+      <QuizGame questions={questions} />
+    </div>
+  );
 };
 
 export default PlayPage;

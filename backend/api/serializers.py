@@ -30,12 +30,6 @@ class QuizSerializer(ModelSerializer):
         return obj.questions.count()
 
 
-class QuestionSerializer(ModelSerializer):
-    class Meta:
-        model = Question
-        fields = "__all__"
-
-
 class ChoiceSerializer(ModelSerializer):
     class Meta:
         model = Choice
@@ -54,6 +48,15 @@ class ChoiceSerializer(ModelSerializer):
             )
 
         return super().create(validated_data)
+
+
+class QuestionSerializer(ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Question
+        fields = "__all__"
+        depth = 1
 
 
 class ScoreRecordSerializer(ModelSerializer):

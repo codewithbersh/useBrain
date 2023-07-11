@@ -25,3 +25,21 @@ export type Quiz = {
   code?: string;
   questions_count: number;
 };
+
+export type Choice = {
+  id: string;
+  choice_text: string;
+  is_correct: boolean;
+  question: string;
+  owner: string;
+};
+
+export type Question = {
+  id: string;
+  choices: Choice[];
+  question_text: string;
+  created: Date;
+  updated: Date;
+  owner: string;
+  quiz: Quiz;
+};
