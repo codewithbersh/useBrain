@@ -1,22 +1,18 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { useQuizGameModalState, useUserNicknameState } from "@/state/quiz-game";
-import { Session } from "next-auth";
 import React from "react";
-import { useForm } from "react-hook-form";
+import Link from "next/link";
 import { z } from "zod";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { signIn, useSession } from "next-auth/react";
+
+import { useQuizGameModalState, useUserNicknameState } from "@/state/quiz-game";
+import { addNickname } from "@/lib/user-api";
+import { cn } from "@/lib/utils";
+
+import { AlertDialog, AlertDialogContent } from "@/components/ui/alert-dialog";
 import {
   Form,
   FormControl,
@@ -26,15 +22,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "./ui/input";
-import { Button, buttonVariants } from "./ui/button";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { signIn } from "next-auth/react";
-import { Icons } from "./icons";
+import { Input } from "@/components/ui/input";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 interface QuizGameModalProps {
-  session: Session | null;
   id: string;
 }
 
@@ -47,11 +38,27 @@ const nicknameSchema = z.object({
     .max(12, "Nickname should be less than 12 characters"),
 });
 
-const QuizGameModal = ({ session, id }: QuizGameModalProps) => {
+const QuizGameModal = ({ id }: QuizGameModalProps) => {
   const { isOpen, setIsOpen } = useQuizGameModalState();
   const { nickname, setNickname } = useUserNicknameState();
   const [isMounted, setIsMounted] = React.useState(false);
+  const { data: session, update } = useSession();
+  const user = session?.user;
+  const queryClient = useQueryClient();
 
+  async function updateSession(nickname: string) {
+    await update({
+      ...session?.user.info,
+      nickname: nickname,
+    });
+  }
+
+  const addNicknameMutation = useMutation({
+    mutationFn: addNickname,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+  });
   const form = useForm<z.infer<typeof nicknameSchema>>({
     resolver: zodResolver(nicknameSchema),
     defaultValues: {
@@ -59,45 +66,64 @@ const QuizGameModal = ({ session, id }: QuizGameModalProps) => {
     },
     mode: "onChange",
   });
+
   React.useEffect(() => {
     setIsMounted(true);
 
-    if (session) {
-      !session.user_info.nickname ? setIsOpen(true) : setIsOpen(false);
+    if (user) {
+      !user.info.nickname ? setIsOpen(true) : setIsOpen(false);
     } else {
       !nickname ? setIsOpen(true) : setIsOpen(false);
     }
-  }, [session, nickname]);
+  }, [user, nickname]);
 
   if (!isMounted) {
     return null;
   }
 
   function onSubmit(values: z.infer<typeof nicknameSchema>) {
-    setNickname(values.nickname);
+    if (user && !user.info.nickname) {
+      addNicknameMutation.mutate({
+        accessToken: user.accessToken,
+        userId: user.info.id,
+        nickname: values.nickname,
+      });
+      updateSession(values.nickname);
+      setIsOpen(false);
+    } else if (!nickname) {
+      setNickname(values.nickname);
+    } else {
+      console.log("Error at onSubmit quiz-game-modal");
+    }
   }
 
   return (
     <div>
       <AlertDialog open={isOpen}>
-        <AlertDialogContent className="max-w-[450px] mx-auto w-full p-8 pt-12">
-          {!session && !nickname ? (
+        <AlertDialogContent className="max-w-[450px] mx-auto w-full p-8">
+          {!user && !nickname ? (
             <>
               <Link
                 href={`/quizzes/${id}`}
                 className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "absolute right-4 top-2"
+                  buttonVariants({ variant: "link" }),
+                  "w-fit -translate-x-4 text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icons.xCircle size={24} className="text-foreground" />
+                Cancel
               </Link>
-              <div className="space-y-4 ">
+              <div className="space-y-8 ">
                 <Button onClick={() => signIn()} className="w-full">
                   Continue with Google
                 </Button>
 
-                <p className="text-center">or</p>
+                <div className="flex items-center gap-4 px-4">
+                  <hr className="w-full" />
+
+                  <p className="text-muted-foreground">or</p>
+                  <hr className="w-full" />
+                </div>
+
                 <Form {...form}>
                   <form
                     onSubmit={form.handleSubmit(onSubmit)}
@@ -128,16 +154,16 @@ const QuizGameModal = ({ session, id }: QuizGameModalProps) => {
                 </Form>
               </div>
             </>
-          ) : session && !session.user_info.nickname ? (
+          ) : user && !user.info.nickname ? (
             <>
               <Link
                 href={`/quizzes/${id}`}
                 className={cn(
-                  buttonVariants({ variant: "ghost" }),
-                  "absolute right-4 top-2"
+                  buttonVariants({ variant: "link" }),
+                  "w-fit -translate-x-4 text-muted-foreground hover:text-foreground"
                 )}
               >
-                <Icons.xCircle size={24} className="text-foreground" />
+                Cancel
               </Link>
               <Form {...form}>
                 <form

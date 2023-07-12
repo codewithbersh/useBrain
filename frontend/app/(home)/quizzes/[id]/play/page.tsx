@@ -1,8 +1,8 @@
 import React from "react";
 import { QuizGame } from "@/components/quiz-game";
 import { Question } from "@/types";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+
+import { getCurrentUser } from "@/lib/session";
 
 interface PlayPageProps {
   params: {
@@ -24,11 +24,11 @@ async function getQuestions(quizId: string): Promise<Array<Question>> {
 }
 
 const PlayPage = async ({ params }: PlayPageProps) => {
-  const session = await getServerSession(authOptions);
+  const user = await getCurrentUser();
   const questions = await getQuestions(params.id);
   return (
     <div className="container">
-      <QuizGame questions={questions} session={session} />
+      <QuizGame questions={questions} />
     </div>
   );
 };

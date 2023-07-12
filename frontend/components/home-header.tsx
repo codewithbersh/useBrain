@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/session";
 import { homeConfig } from "@/config/home-config";
 import { MainNav } from "@/components/main-nav";
 import { buttonVariants } from "@/components/ui/button";
+import SignOutBtn from "./singout";
 
 const HomeHeader = async () => {
   const user = await getCurrentUser();
@@ -19,6 +20,7 @@ const HomeHeader = async () => {
             Get Started
           </Link>
         )}
+        <SignOutBtn />
       </header>
     </div>
   );

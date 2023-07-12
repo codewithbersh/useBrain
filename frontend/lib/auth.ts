@@ -1,6 +1,7 @@
 import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
+import { getAccessToken, getUserInfo } from "./auth-api";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -10,50 +11,25 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
 
-  //   {
-  //     "id": "4b81f972-cd90-4cfe-8305-ea847d1428ac",
-  //     "email": "admin@example.com",
-  //     "first_name": "admin",
-  //     "last_name": "admin",
-  //     "nickname": ""
-  // }
-
   callbacks: {
     async signIn({ account }) {
       if (account?.provider === "google") {
-        const { id_token: accessToken } = account;
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/auth/google/",
-          {
-            access_token: accessToken,
+        const { id_token } = account;
+
+        if (id_token) {
+          const accessToken = await getAccessToken(id_token);
+          account.accessToken = accessToken;
+          if (accessToken) {
+            const info = await getUserInfo(accessToken);
+            account.info = {
+              id: info.id,
+              email: info.email,
+              firstName: info.first_name,
+              lastName: info.last_name,
+              nickname: info.nickname,
+            };
           }
-        );
-
-        const access_token = response.data.access;
-        account.access_token = access_token;
-
-        const user_response = await axios.get(
-          "http://127.0.0.1:8000/api/users/",
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        );
-
-        const { id, email, first_name, last_name, nickname } =
-          user_response.data[0];
-
-        account.user_info = {
-          id: id,
-          email: email,
-          first_name: first_name,
-          last_name: last_name,
-          nickname: nickname,
-        };
-
-        // console.log("User response data: ", user_response.data);
-        // console.log("User response data access: ", user_response.data.access);
+        }
 
         return true;
       }
@@ -61,21 +37,34 @@ export const authOptions: NextAuthOptions = {
       return false;
     },
 
-    async jwt({ token, account }) {
+    async jwt({ token, account, user, trigger, session }) {
       if (account) {
         token = Object.assign({}, token, {
-          access_token: account.access_token,
-          user_info: account.user_info,
+          accessToken: account.accessToken,
+          info: account.info,
         });
       }
-      return token;
+      if (trigger === "update") {
+        token = Object.assign({}, token, {
+          info: session,
+        });
+        return token;
+      }
+      return { ...token, ...user };
     },
     async session({ session, token }) {
       if (session) {
-        session = Object.assign({}, session, {
-          access_token: token.access_token,
-          user_info: token.user_info,
-        });
+        session.user = {
+          ...session.user,
+          accessToken: token.accessToken as string,
+          info: token.info as {
+            id: string;
+            email: string;
+            firstName: string;
+            lastName: string;
+            nickname: string;
+          },
+        };
       }
       return session;
     },

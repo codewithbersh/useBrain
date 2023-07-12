@@ -1,6 +1,6 @@
 "use client";
 
-import { Question } from "@/types";
+import { Question, User } from "@/types";
 import React, { useState } from "react";
 import {
   Card,
@@ -17,10 +17,9 @@ import { QuizGameModal } from "./quiz-game-modal";
 
 interface QuizGameProps {
   questions: Question[];
-  session: Session | null;
 }
 
-const QuizGame = ({ questions, session }: QuizGameProps) => {
+const QuizGame = ({ questions }: QuizGameProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -119,10 +118,7 @@ const QuizGame = ({ questions, session }: QuizGameProps) => {
         </CardFooter>
       </Card>
       <Button onClick={() => signOut()}>Signout</Button>
-      <QuizGameModal
-        session={session}
-        id={questions[currentQuestionIndex].quiz.id}
-      />
+      <QuizGameModal id={questions[currentQuestionIndex].quiz.id} />
     </div>
   );
 };

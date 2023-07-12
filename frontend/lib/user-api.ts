@@ -29,3 +29,37 @@ export const getUser = async (accessToken: string): Promise<Array<User>> => {
     return [];
   }
 };
+
+type AddNicknameProps = {
+  userId: string;
+  accessToken: string;
+  nickname: string;
+};
+
+export const addNickname = async ({
+  accessToken,
+  nickname,
+  userId,
+}: AddNicknameProps) => {
+  try {
+    const res = await userApi.patch(
+      `users/${userId}/`,
+      {
+        nickname: nickname,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+    if (res.status === 200) {
+      return res.data;
+    } else {
+      throw new Error(`Request failed with status code ${res.status}`);
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

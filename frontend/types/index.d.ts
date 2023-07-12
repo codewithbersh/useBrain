@@ -4,11 +4,17 @@ export type NavItem = {
 };
 
 export type User = {
-  id: string;
+  name: string;
   email: string;
-  first_name: string;
-  last_name: string;
-  nickname: string;
+  image: string;
+  accessToken: string;
+  info: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    nickname: string;
+  };
 };
 
 export type Quiz = {
