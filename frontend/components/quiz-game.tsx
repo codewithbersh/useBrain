@@ -8,14 +8,19 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Button, buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useQuizGameModalState, useUserNicknameState } from "@/state/quiz-game";
+import { signOut, useSession } from "next-auth/react";
+import { Session } from "next-auth";
+import { QuizGameModal } from "./quiz-game-modal";
 
 interface QuizGameProps {
   questions: Question[];
+  session: Session | null;
 }
 
-const QuizGame = ({ questions }: QuizGameProps) => {
+const QuizGame = ({ questions, session }: QuizGameProps) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -53,7 +58,9 @@ const QuizGame = ({ questions }: QuizGameProps) => {
     <div>
       <Card className="max-w-[500px] mx-auto">
         <CardHeader>
-          <h1 className="font-bold text-2xl">{questions[0].quiz.title}</h1>
+          <h1 className="font-bold text-2xl text-center">
+            {questions[0].quiz.title}
+          </h1>
         </CardHeader>
         <CardHeader className=" p-2 pb-4">
           <h1 className="font-bold text-4xl text-center">{score}</h1>
@@ -111,6 +118,11 @@ const QuizGame = ({ questions }: QuizGameProps) => {
           )}
         </CardFooter>
       </Card>
+      <Button onClick={() => signOut()}>Signout</Button>
+      <QuizGameModal
+        session={session}
+        id={questions[currentQuestionIndex].quiz.id}
+      />
     </div>
   );
 };

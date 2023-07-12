@@ -4,6 +4,7 @@ import {
   PlayCircle,
   type Icon as LucideIcon,
   ArrowLeftCircle,
+  XCircle,
 } from "lucide-react";
 
 export const Icons = {
@@ -11,4 +12,5 @@ export const Icons = {
   fileQuestion: FileQuestion,
   playCircle: PlayCircle,
   arrowLeftCircle: ArrowLeftCircle,
+  xCircle: XCircle,
 };
