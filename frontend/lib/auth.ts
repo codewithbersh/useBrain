@@ -1,7 +1,6 @@
-import axios from "axios";
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import { getAccessToken, getUserInfo } from "./auth-api";
+import { getAccessToken, getUserInfo } from "@/lib/auth-api";
 
 export const authOptions: NextAuthOptions = {
   providers: [

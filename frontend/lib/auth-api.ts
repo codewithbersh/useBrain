@@ -1,14 +1,8 @@
-import axios, { AxiosResponse } from "axios";
-import { userApi } from "./user-api";
-
-export const authApi = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
-});
+import { axiosApi } from "@/lib/axios-api";
 
 export const getAccessToken = async (id_token: string): Promise<string> => {
-  if (!id_token) throw new Error();
   try {
-    const res = await authApi.post("auth/google/", {
+    const res = await axiosApi.post("auth/google/", {
       access_token: id_token,
     });
 
@@ -32,7 +26,7 @@ type User = {
 
 export const getUserInfo = async (accessToken: string): Promise<User> => {
   try {
-    const res = await userApi.get("users/", {
+    const res = await axiosApi.get("users/", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

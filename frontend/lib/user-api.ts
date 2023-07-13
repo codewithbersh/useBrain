@@ -1,8 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-
-export const userApi = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
-});
+import { AxiosResponse } from "axios";
+import { axiosApi } from "@/lib/axios-api";
 
 export type User = {
   id: string;
@@ -14,7 +11,7 @@ export type User = {
 
 export const getUser = async (accessToken: string): Promise<Array<User>> => {
   try {
-    const res = await userApi.get("users/", {
+    const res = await axiosApi.get("users/", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -42,7 +39,7 @@ export const addNickname = async ({
   userId,
 }: AddNicknameProps) => {
   try {
-    const res = await userApi.patch(
+    const res = await axiosApi.patch(
       `users/${userId}/`,
       {
         nickname: nickname,

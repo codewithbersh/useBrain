@@ -1,20 +1,61 @@
+import { AxiosResponse, isAxiosError } from "axios";
 import { Quiz } from "@/types";
-import axios, { AxiosResponse } from "axios";
+import { axiosApi } from "@/lib/axios-api";
 
-export const quizzesApi = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
-});
-
-export const getQuizzes = async (): Promise<Array<Quiz>> => {
+export const getQuizzesByPopularity = async (): Promise<Array<Quiz>> => {
   try {
-    const res: AxiosResponse<Quiz[]> = await quizzesApi.get("quizzes/");
+    const res: AxiosResponse<Quiz[]> = await axiosApi.get(
+      "landing-page-quizzes/?ordering=-times_played/"
+    );
     if (res.status === 200 || res.status === 201) {
       return res.data;
     } else {
       throw new Error(`Request failed with status code ${res.status}`);
     }
   } catch (error) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
+      console.error(
+        "getQuizzesByPopularity Error Details:",
+        error.response?.data
+      );
+      console.error("getQuizzesByPopularity Request:", error.config);
+    }
+    throw error;
+  }
+};
+
+export const getQuizzesByDateCreated = async (): Promise<Array<Quiz>> => {
+  try {
+    const res: AxiosResponse<Quiz[]> = await axiosApi.get(
+      "landing-page-quizzes/?ordering=-created/"
+    );
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      throw new Error(`Request failed with status code ${res.status}`);
+    }
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.error(
+        "getQuizzesByDateCreated Error Details:",
+        error.response?.data
+      );
+      console.error("getQuizzesByDateCreated Request:", error.config);
+    }
+    throw error;
+  }
+};
+
+export const getQuizzes = async (): Promise<Array<Quiz>> => {
+  try {
+    const res: AxiosResponse<Quiz[]> = await axiosApi.get("quizzes/");
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      throw new Error(`Request failed with status code ${res.status}`);
+    }
+  } catch (error) {
+    if (isAxiosError(error)) {
       console.error("Error Details:", error.response?.data);
       console.error("Request:", error.config);
     }
@@ -28,14 +69,14 @@ type GetQuizProps = {
 
 export const getQuiz = async ({ id }: GetQuizProps): Promise<Quiz> => {
   try {
-    const res: AxiosResponse<Quiz> = await quizzesApi.get(`quizzes/${id}/`);
+    const res: AxiosResponse<Quiz> = await axiosApi.get(`quizzes/${id}/`);
     if (res.status === 200 || res.status === 201) {
       return res.data;
     } else {
       throw new Error(`Request failed with status code ${res.status}`);
     }
   } catch (error) {
-    if (axios.isAxiosError(error)) {
+    if (isAxiosError(error)) {
       console.error("Error Details:", error.response?.data);
       console.error("Request:", error.config);
     }

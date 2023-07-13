@@ -1,35 +1,13 @@
-import { Balancer } from "react-wrap-balancer";
-import { Quiz } from "@/types";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { QuizCard } from "@/components/quiz-card";
 import Link from "next/link";
+import { Balancer } from "react-wrap-balancer";
 import { cn } from "@/lib/utils";
+import {
+  getQuizzesByDateCreated,
+  getQuizzesByPopularity,
+} from "@/lib/quizzes-api";
 
-async function getQuizzesByPopularity(): Promise<Array<Quiz>> {
-  const res = await fetch(
-    "http://127.0.0.1:8000/api/landing-page-quizzes/?ordering=-times_played",
-    {
-      next: { revalidate: 0 },
-    }
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-}
-
-async function getQuizzesByDateCreated(): Promise<Array<Quiz>> {
-  const res = await fetch(
-    "http://127.0.0.1:8000/api/landing-page-quizzes/?ordering=-created",
-    {
-      next: { revalidate: 0 },
-    }
-  );
-  if (!res.ok) {
-    throw new Error("Failed to fetch data");
-  }
-  return res.json();
-}
+import { QuizCard } from "@/components/quiz-card";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 const HomePage = async () => {
   const quizzessByPopularity = await getQuizzesByPopularity();

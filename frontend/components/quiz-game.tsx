@@ -1,7 +1,9 @@
 "use client";
 
-import { Question, User } from "@/types";
-import React, { useState } from "react";
+import { useState } from "react";
+import { Question } from "@/types";
+import { cn } from "@/lib/utils";
+
 import {
   Card,
   CardContent,
@@ -9,11 +11,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { useQuizGameModalState, useUserNicknameState } from "@/state/quiz-game";
-import { signOut, useSession } from "next-auth/react";
-import { Session } from "next-auth";
-import { QuizGameModal } from "./quiz-game-modal";
+import { QuizGameModal } from "@/components/quiz-game-modal";
 
 interface QuizGameProps {
   questions: Question[];
@@ -117,7 +115,7 @@ const QuizGame = ({ questions }: QuizGameProps) => {
           )}
         </CardFooter>
       </Card>
-      <Button onClick={() => signOut()}>Signout</Button>
+
       <QuizGameModal id={questions[currentQuestionIndex].quiz.id} />
     </div>
   );
