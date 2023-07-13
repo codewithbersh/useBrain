@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { useQuizGameState } from "@/state/quiz-game";
+import { Balancer } from "react-wrap-balancer";
 
 interface QuizGameProps {
   questions: Question[];
@@ -60,16 +61,20 @@ const QuizGame = ({ questions }: QuizGameProps) => {
   return (
     <div>
       <Card className="max-w-[500px] mx-auto">
-        <CardHeader>
-          <h1 className="font-bold text-2xl text-center">
+        <CardHeader className="flex items-center justify-between flex-row space-y-0">
+          <small className="text-muted-foreground">
             {questions[0].quiz.title}
+          </small>
+
+          <small>
+            {currentQuestionIndex + 1}/{questions.length}
+          </small>
+        </CardHeader>
+
+        <CardContent className="py-8 space-y-12">
+          <h1 className="text-center text-2xl font-bold">
+            <Balancer>{questions[currentQuestionIndex].question_text}</Balancer>
           </h1>
-        </CardHeader>
-        <CardHeader className=" p-2 pb-4">
-          <h1 className="font-bold text-4xl text-center">{score}</h1>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <p>{questions[currentQuestionIndex].question_text}</p>
 
           <div className=" grid grid-cols-2 gap-4">
             {questions[currentQuestionIndex].choices.map((choice) => (
@@ -112,12 +117,12 @@ const QuizGame = ({ questions }: QuizGameProps) => {
           </div>
         </CardContent>
         <CardFooter className="justify-end">
-          {selectedAnswer !== null && !answerSubmitted && (
-            <Button onClick={handleSubmit}>Submit Answer</Button>
-          )}
-
-          {answerSubmitted && (
+          {answerSubmitted ? (
             <Button onClick={handleNextQuestion}>Next</Button>
+          ) : (
+            <Button disabled={selectedAnswer === null} onClick={handleSubmit}>
+              Submit
+            </Button>
           )}
         </CardFooter>
       </Card>

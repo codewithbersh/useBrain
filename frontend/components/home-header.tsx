@@ -4,6 +4,7 @@ import { homeConfig } from "@/config/home-config";
 
 import { MainNav } from "@/components/main-nav";
 import { buttonVariants } from "@/components/ui/button";
+import SignOutBtn from "./sign-out";
 
 const HomeHeader = async () => {
   const user = await getCurrentUser();
@@ -12,9 +13,10 @@ const HomeHeader = async () => {
       <header className="py-6 container flex items-center justify-between">
         <MainNav items={homeConfig} />
         {user ? (
-          <Link className={buttonVariants()} href="/dashboard">
-            Dashboard
-          </Link>
+          // <Link className={buttonVariants()} href="/dashboard">
+          //   Dashboard
+          // </Link>
+          <SignOutBtn />
         ) : (
           <Link className={buttonVariants()} href="/api/auth/signin">
             Get Started
