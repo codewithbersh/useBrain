@@ -8,7 +8,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signIn, useSession } from "next-auth/react";
 
-import { useQuizGameModalState, useUserNicknameState } from "@/state/quiz-game";
+import {
+  useQuizGameModalState,
+  useQuizGameState,
+  useUserNicknameState,
+} from "@/state/quiz-game";
 import { addNickname } from "@/lib/user-api";
 import { cn } from "@/lib/utils";
 
@@ -39,6 +43,7 @@ const nicknameSchema = z.object({
 });
 
 const QuizGameModal = ({ id }: QuizGameModalProps) => {
+  const { setGameState } = useQuizGameState();
   const { isOpen, setIsOpen } = useQuizGameModalState();
   const { nickname, setNickname } = useUserNicknameState();
   const [isMounted, setIsMounted] = React.useState(false);
@@ -71,9 +76,13 @@ const QuizGameModal = ({ id }: QuizGameModalProps) => {
     setIsMounted(true);
 
     if (user) {
-      !user.info.nickname ? setIsOpen(true) : setIsOpen(false);
+      !user.info.nickname
+        ? (setIsOpen(true), setGameState("initial"))
+        : (setIsOpen(false), setGameState("playing"));
     } else {
-      !nickname ? setIsOpen(true) : setIsOpen(false);
+      !nickname
+        ? (setIsOpen(true), setGameState("initial"))
+        : (setIsOpen(false), setGameState("playing"));
     }
   }, [user, nickname]);
 

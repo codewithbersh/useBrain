@@ -11,17 +11,23 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { QuizGameModal } from "@/components/quiz-game-modal";
+import { useQuizGameState } from "@/state/quiz-game";
 
 interface QuizGameProps {
   questions: Question[];
 }
 
 const QuizGame = ({ questions }: QuizGameProps) => {
+  const { gameState } = useQuizGameState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
+
+  // update this to a loading skeleton later
+  if (gameState === "initial") {
+    return "loading...";
+  }
 
   const handleAnswerChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!answerSubmitted) {
@@ -115,8 +121,6 @@ const QuizGame = ({ questions }: QuizGameProps) => {
           )}
         </CardFooter>
       </Card>
-
-      <QuizGameModal id={questions[currentQuestionIndex].quiz.id} />
     </div>
   );
 };

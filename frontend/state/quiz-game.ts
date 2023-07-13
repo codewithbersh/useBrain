@@ -19,3 +19,14 @@ export const useUserNicknameState = create<UserNicknameState>()((set) => ({
   nickname: null,
   setNickname: (nickname: string | null) => set({ nickname }),
 }));
+
+interface QuizGameState {
+  gameState: "initial" | "playing" | "gameOver";
+  setGameState: (state: "initial" | "playing" | "gameOver") => void;
+}
+
+export const useQuizGameState = create<QuizGameState>()((set) => ({
+  gameState: "initial",
+  setGameState: (gameState: "initial" | "playing" | "gameOver") =>
+    set({ gameState }),
+}));
