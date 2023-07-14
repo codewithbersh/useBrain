@@ -22,7 +22,7 @@ export const useUserNicknameState = create<UserNicknameState>()((set) => ({
 
 interface QuizGameState {
   gameState: "initial" | "playing" | "gameOver";
-  setGameState: (state: "initial" | "playing" | "gameOver") => void;
+  setGameState: (gameState: "initial" | "playing" | "gameOver") => void;
 }
 
 export const useQuizGameState = create<QuizGameState>()((set) => ({

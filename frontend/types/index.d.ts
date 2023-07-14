@@ -24,7 +24,7 @@ export type Quiz = {
   title: string;
   difficulty: "easy" | "medium" | "hard";
   privacy: "PRI" | "PUB" | "LIN" | "COD";
-  time_limit?: number;
+  time_limit: number | null;
   created: Date;
   updated: Date;
   times_played: number;

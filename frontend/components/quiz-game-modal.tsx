@@ -74,17 +74,19 @@ const QuizGameModal = ({ id }: QuizGameModalProps) => {
 
   React.useEffect(() => {
     setIsMounted(true);
+  }, []);
+
+  React.useEffect(() => {
     if (isMounted) {
-      if ((user && !user.info.nickname) || (!user && !nickname)) {
-        setIsOpen(true);
-        setGameState("initial");
-      } else {
-        console.log("else");
+      if ((user && user.info.nickname) || nickname) {
         setIsOpen(false);
         setGameState("playing");
+      } else {
+        setIsOpen(true);
+        setGameState("initial");
       }
     }
-  }, [user, nickname]);
+  }, [isMounted, user, nickname]);
 
   if (!isMounted) {
     return null;

@@ -13,6 +13,7 @@ const PlayPage = async ({ params }: PlayPageProps) => {
   const questions = await getQuestions(params.id);
 
   if (!questions) notFound();
+  console.log(questions);
   return (
     <div className="container">
       <QuizGame questions={questions} />

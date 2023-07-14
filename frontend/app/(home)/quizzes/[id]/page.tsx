@@ -20,9 +20,9 @@ const QuizDetail = async ({ params }: QuizDetailProps) => {
       <div className="md:col-span-2">
         <Link
           href="/quizzes"
-          className={cn(buttonVariants({ variant: "ghost" }), "gap-2")}
+          className={cn(buttonVariants({ variant: "link" }), "-translate-x-4")}
         >
-          <Icons.arrowLeftCircle size={24} />
+          Quizzes
         </Link>
       </div>
       <div className="md:col-span-8 mx-auto space-y-8">
