@@ -1,6 +1,9 @@
+import { Icon } from "lucide-react";
+
 export type NavItem = {
   title: string;
   href: string;
+  icon: Icon;
 };
 
 export type User = {

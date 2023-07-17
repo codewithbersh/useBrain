@@ -17,10 +17,10 @@ export default async function HomeLayout({
     <section>
       <header>
         <div className="flex items-center justify-between container py-8">
-          <div className="flex items-center gap-2">
+          <Link href="/" className="flex items-center gap-2">
             <Icons.logo size={48} />
             <h1 className="font-bold text-2xl">useBrain</h1>
-          </div>
+          </Link>
           <nav>
             {session ? (
               <Link
