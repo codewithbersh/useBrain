@@ -42,3 +42,20 @@ export const getUserInfo = async (accessToken: string): Promise<User> => {
     throw new Error(`Error: ${error}`);
   }
 };
+
+export const getDemoAccessToken = async (): Promise<string> => {
+  try {
+    const res = await axiosApi.post("auth/login/", {
+      email: process.env.DEMO_USER_EMAIL,
+      password: process.env.DEMO_USER_PASSWORD,
+    });
+
+    if (res.status === 200) {
+      return res.data.access;
+    } else {
+      throw new Error(`Request failed with status code ${res.status}`);
+    }
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
+  }
+};

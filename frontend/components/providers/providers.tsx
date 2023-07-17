@@ -1,6 +1,5 @@
-import React from "react";
-import SessionProvider from "@/components/session-provider";
-import MyQueryClientProvider from "./queryclient-provider";
+import SessionProvider from "@/components/providers/session-provider";
+import MyQueryClientProvider from "@/components/providers/queryclient-provider";
 
 interface ProvidersProps {
   children: React.ReactNode;
