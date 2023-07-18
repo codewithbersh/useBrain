@@ -15,7 +15,7 @@ export default function MainLayout({
           <SideNav />
         </div>
 
-        <div>{children}</div>
+        <div className="w-full">{children}</div>
       </div>
     </section>
   );

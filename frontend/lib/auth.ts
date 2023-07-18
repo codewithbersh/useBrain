@@ -1,10 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
-import {
-  getAccessToken,
-  getDemoAccessToken,
-  getUserInfo,
-} from "@/lib/auth-api";
+import { getAccessToken, getDemoAccessToken, getUserInfo } from "@/lib/user";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export const authOptions: NextAuthOptions = {

@@ -1,3 +1,4 @@
+import { CATEGORY_CHOICES } from "@/lib/schema";
 import { Icon } from "lucide-react";
 
 export type NavItem = {
@@ -51,4 +52,15 @@ export type Question = {
   updated: Date;
   owner: string;
   quiz: Quiz;
+};
+
+export type Category = (typeof CATEGORY_CHOICES)[number];
+
+export type Lesson = {
+  id: string;
+  category: Category;
+  title: string;
+  is_public: boolean;
+  created: Date;
+  owner: string;
 };

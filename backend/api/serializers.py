@@ -1,7 +1,7 @@
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from accounts.models import User
-from .models import Category, Quiz, Question, Choice, ScoreRecord
+from .models import Category, Quiz, Question, Choice, ScoreRecord, Lesson
 
 
 class UserSerializer(ModelSerializer):
@@ -93,3 +93,10 @@ class QuizScoreRecordSerializer(ModelSerializer):
         model = ScoreRecord
         fields = "__all__"
         depth = 1
+
+
+# --------
+class LessonSerializer(ModelSerializer):
+    class Meta:
+        model = Lesson
+        fields = "__all__"

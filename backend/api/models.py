@@ -107,3 +107,26 @@ class ScoreRecord(models.Model):
             )
         else:
             return f"{self.player_unverified} - {self.score} - {self.date_played}"
+
+
+# ----------------
+
+
+class Lesson(models.Model):
+    CATEGORY_CHOICES = [
+        ("General Knowledge", "General Knowledge"),
+        ("Sports", "Sports"),
+        ("Science", "Science"),
+        ("Others", "Others"),
+    ]
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="lessons")
+    category = models.CharField(
+        max_length=128, choices=CATEGORY_CHOICES, default="Others"
+    )
+    title = models.CharField(max_length=128)
+    is_public = models.BooleanField(default=False)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

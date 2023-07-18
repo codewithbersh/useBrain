@@ -3,6 +3,7 @@ import {
   ChevronLeft,
   Globe,
   LayoutDashboard,
+  Loader2,
   Menu,
   ScrollText,
   Settings,
@@ -18,4 +19,5 @@ export const Icons = {
   globe: Globe,
   settings: Settings,
   user: User,
+  loader: Loader2,
 };
