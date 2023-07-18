@@ -21,39 +21,6 @@ export type User = {
   };
 };
 
-export type Quiz = {
-  id: string;
-  owner: User;
-  category: { name: string };
-  title: string;
-  difficulty: "easy" | "medium" | "hard";
-  privacy: "PRI" | "PUB" | "LIN" | "COD";
-  time_limit: number | null;
-  created: Date;
-  updated: Date;
-  times_played: number;
-  code?: string;
-  questions_count: number;
-};
-
-export type Choice = {
-  id: string;
-  choice_text: string;
-  is_correct: boolean;
-  question: string;
-  owner: string;
-};
-
-export type Question = {
-  id: string;
-  choices: Choice[];
-  question_text: string;
-  created: Date;
-  updated: Date;
-  owner: string;
-  quiz: Quiz;
-};
-
 export type Category = (typeof CATEGORY_CHOICES)[number];
 
 export type Lesson = {
@@ -63,4 +30,5 @@ export type Lesson = {
   is_public: boolean;
   created: Date;
   owner: string;
+  total_questions: number;
 };

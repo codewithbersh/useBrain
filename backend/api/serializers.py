@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from accounts.models import User
 from .models import Category, Lesson
 
@@ -15,8 +15,12 @@ class CategorySerializer(ModelSerializer):
         fields = ["name"]
 
 
-# --------
 class LessonSerializer(ModelSerializer):
+    total_questions = SerializerMethodField()
+
+    def get_total_questions(self, obj):
+        return obj.questions.count()
+
     class Meta:
         model = Lesson
         fields = "__all__"

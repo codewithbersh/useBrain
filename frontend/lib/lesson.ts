@@ -1,7 +1,7 @@
+import { notFound } from "next/navigation";
 import { axiosApi } from "@/lib/axios-api";
 import { Category, Lesson } from "@/types";
 import { AxiosResponse } from "axios";
-import { notFound } from "next/navigation";
 
 export const getLessonDetail = async (
   lessonId: string
@@ -55,5 +55,26 @@ export const updateLessonDetail = async ({
     }
   } catch (error) {
     throw new Error(`Error: ${error}`);
+  }
+};
+
+export const getMyLessons = async (
+  accessToken: string
+): Promise<Array<Lesson> | null> => {
+  try {
+    const res = await axiosApi.get<Lesson[]>("user-lessons/", {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };

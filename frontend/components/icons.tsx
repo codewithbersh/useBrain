@@ -5,8 +5,13 @@ import {
   LayoutDashboard,
   Loader2,
   Menu,
+  MoreVertical,
+  PlayCircle,
+  PlusCircle,
   ScrollText,
   Settings,
+  Settings2,
+  Trash,
   User,
 } from "lucide-react";
 
@@ -20,4 +25,9 @@ export const Icons = {
   settings: Settings,
   user: User,
   loader: Loader2,
+  plusCircle: PlusCircle,
+  moreVertical: MoreVertical,
+  settings2: Settings2,
+  trash: Trash,
+  playCircle: PlayCircle,
 };

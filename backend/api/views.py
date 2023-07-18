@@ -27,3 +27,18 @@ class CategoryViewSet(ModelViewSet):
 class LessonViewSet(ModelViewSet):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+
+
+class UserLessonViewSet(ModelViewSet):
+    serializer_class = LessonSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_authenticated:
+            return Lesson.objects.filter(owner=user)
+        raise exceptions.AuthenticationFailed()
+
+
+class PublicLessonViewSet(ModelViewSet):
+    queryset = Lesson.objects.filter(is_public=True)
+    serializer_class = LessonSerializer
