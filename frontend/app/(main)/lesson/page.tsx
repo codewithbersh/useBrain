@@ -20,15 +20,20 @@ const Lesson = async ({ searchParams }: LessonProps) => {
 
   const createOnlyView = id === undefined;
   const privateOnlyView = lesson?.owner === session?.user.info.id;
-  const publicOnlyView = lesson?.owner !== session?.user.info.id;
   return (
     <div>
       <PageHeader
         heading="Lesson"
-        description={"View, manage, create, and play lessons."}
+        description={
+          createOnlyView
+            ? "Create new lesson"
+            : privateOnlyView
+            ? "View and manage lesson"
+            : "View and play lesson."
+        }
       />
 
-      {publicOnlyView && lesson && <LessonSummary lesson={lesson} />}
+      {!privateOnlyView && lesson && <LessonSummary lesson={lesson} />}
 
       {privateOnlyView || createOnlyView ? (
         <NewLessonForm lessonId={id} />
