@@ -1,12 +1,17 @@
 "use client";
 
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CATEGORY_CHOICES, lessonSchema } from "@/lib/schema";
-import { getLessonDetail, updateLessonDetail } from "@/lib/lesson";
+import {
+  createLesson,
+  getLessonDetail,
+  updateLessonDetail,
+} from "@/lib/lesson";
 
 import {
   Select,
@@ -35,11 +40,13 @@ import { LoadingLessonSummary } from "@/components/loading-skeleton";
 
 interface NewLessonFormProps {
   lessonId: string | undefined;
+  userId: string;
 }
 
-const NewLessonForm = ({ lessonId }: NewLessonFormProps) => {
+const NewLessonForm = ({ lessonId, userId }: NewLessonFormProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const { data: lesson, isLoading } = useQuery({
     queryKey: [lessonId],
@@ -93,11 +100,31 @@ const NewLessonForm = ({ lessonId }: NewLessonFormProps) => {
     },
   });
 
+  const createLessonMutation = useMutation({
+    mutationFn: createLesson,
+    onSuccess: (values) => {
+      queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
+      console.log("Values: ", values);
+      if (values) {
+        router.push(`/lesson?id=${values.id}`);
+      }
+    },
+  });
+
   function onSubmit(values: z.infer<typeof lessonSchema>) {
     if (lesson) {
       updateLessonMutation.mutate({ lessonId: lesson.id, ...values });
+    } else {
+      const newLesson = {
+        ...values,
+        owner: userId,
+      };
+      console.log("New Lesson: ", newLesson);
+      createLessonMutation.mutate(newLesson);
     }
   }
+
+  console.log(lesson);
 
   return (
     <div className="space-y-4">

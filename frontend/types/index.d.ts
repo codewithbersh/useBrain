@@ -32,3 +32,8 @@ export type Lesson = {
   owner: string;
   total_questions: number;
 };
+
+export type NewLesson = Omit<
+  Lesson,
+  "id" | "total_questions" | "created" | "is_public"
+> & { isPublic: boolean };

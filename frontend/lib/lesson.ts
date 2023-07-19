@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { axiosApi } from "@/lib/axios-api";
-import { Category, Lesson } from "@/types";
 import { AxiosResponse } from "axios";
+import { axiosApi } from "@/lib/axios-api";
+import { Category, Lesson, NewLesson } from "@/types";
 
 export const getLessonDetail = async (
   lessonId: string
@@ -82,6 +82,28 @@ export const getMyLessons = async (
 export const deleteMyLesson = async (lessonId: string) => {
   try {
     const res = await axiosApi.delete(`lessons/${lessonId}/`);
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
+
+export const createLesson = async (
+  lesson: NewLesson
+): Promise<Lesson | null> => {
+  try {
+    const res = await axiosApi.post<Lesson | null>("lessons/", {
+      owner: lesson.owner,
+      category: lesson.category,
+      is_public: lesson.isPublic,
+      title: lesson.title,
+    });
+
     if (res.status === 200 || res.status === 201) {
       return res.data;
     } else {

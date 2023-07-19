@@ -25,20 +25,21 @@ const DeleteLessonModal = () => {
   const queryClient = useQueryClient();
   const { isOpen, onClose, lesson } = useDeleteLessonModal();
 
-  const deleteLessonMutation = useMutation({
-    mutationFn: deleteMyLesson,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
-      onClose();
-    },
-  });
-
   const form = useForm<z.infer<typeof deleteLessonSchema>>({
     resolver: zodResolver(deleteLessonSchema),
     defaultValues: {
       verification: "",
     },
     mode: "onChange",
+  });
+
+  const deleteLessonMutation = useMutation({
+    mutationFn: deleteMyLesson,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
+      onClose();
+      form.reset();
+    },
   });
 
   const handleClose = () => {
