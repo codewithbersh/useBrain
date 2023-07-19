@@ -5,13 +5,9 @@ import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CATEGORY_CHOICES, lessonSchema } from "@/lib/schema";
-import {
-  createLesson,
-  getLessonDetail,
-  updateLessonDetail,
-} from "@/lib/lesson";
+import { createLesson, updateLessonDetail } from "@/lib/lesson";
 
 import {
   Select,
@@ -36,28 +32,24 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { LessonSummary } from "@/components/lesson-summary";
-import { LoadingLessonSummary } from "@/components/loading-skeleton";
+import { Lesson } from "@/types";
 
 interface NewLessonFormProps {
   lessonId: string | undefined;
   userId: string;
   accessToken: string;
+  lesson: Lesson | null | undefined;
 }
 
 const NewLessonForm = ({
   lessonId,
   userId,
   accessToken,
+  lesson,
 }: NewLessonFormProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  const { data: lesson, isLoading } = useQuery({
-    queryKey: [lessonId],
-    queryFn: () => getLessonDetail({ lessonId: lessonId!, accessToken }),
-    enabled: !!lessonId,
-  });
 
   const form = useForm<z.infer<typeof lessonSchema>>({
     resolver: zodResolver(lessonSchema),
@@ -89,7 +81,7 @@ const NewLessonForm = ({
   const updateLessonMutation = useMutation({
     mutationFn: updateLessonDetail,
     onSuccess: (value) => {
-      queryClient.invalidateQueries({ queryKey: [lesson!.id] });
+      queryClient.invalidateQueries({ queryKey: ["lesson", lesson!.id] });
       toast({
         title: "Lesson saved.",
         description: (
@@ -135,12 +127,7 @@ const NewLessonForm = ({
 
   return (
     <div className="space-y-4">
-      {!updateLessonMutation.isLoading && lesson && (
-        <LessonSummary lesson={lesson} />
-      )}
-      {lessonId && (isLoading || updateLessonMutation.isLoading) && (
-        <LoadingLessonSummary />
-      )}
+      <LessonSummary lesson={lesson} />
 
       <div className=" border-border border rounded-md w-full p-4 sm:p-8">
         <Form {...form}>

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Lesson } from "@/types";
@@ -26,7 +28,10 @@ const LessonQuestions = ({ lesson }: LessonQuestionsProps) => {
       </Link>
 
       {questions.map((question) => (
-        <div className="flex justify-between items-center gap-8 py-2 px-4 border-border border rounded-md">
+        <div
+          key={question.id}
+          className="flex justify-between items-center gap-8 py-2 px-4 border-border border rounded-md"
+        >
           <h1 className="font-bold">{question.question_text}</h1>
           <LessonQuestionDropdown />
         </div>
