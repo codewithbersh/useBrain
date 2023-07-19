@@ -24,7 +24,10 @@ const MyLessons = ({ accessToken }: MyLessonsProps) => {
     <div className="space-y-4">
       <Link
         href="/lesson"
-        className={cn(buttonVariants({ variant: "outline" }), "w-full gap-2")}
+        className={cn(
+          buttonVariants({ variant: "outline" }),
+          "w-full gap-2 border-dashed text-muted-foreground"
+        )}
       >
         <Icons.plusCircle size={16} />
         Add new lesson

@@ -124,8 +124,6 @@ const NewLessonForm = ({ lessonId, userId }: NewLessonFormProps) => {
     }
   }
 
-  console.log(lesson);
-
   return (
     <div className="space-y-4">
       {!updateLessonMutation.isLoading && lesson && (
