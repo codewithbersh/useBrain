@@ -78,3 +78,17 @@ export const getMyLessons = async (
     return null;
   }
 };
+
+export const deleteMyLesson = async (lessonId: string) => {
+  try {
+    const res = await axiosApi.delete(`lessons/${lessonId}/`);
+    if (res.status === 200 || res.status === 201) {
+      return res.data;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

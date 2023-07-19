@@ -15,3 +15,11 @@ export const lessonSchema = z.object({
   category: z.enum(CATEGORY_CHOICES),
   isPublic: z.boolean(),
 });
+
+export const deleteLessonSchema = z.object({
+  verification: z
+    .string()
+    .refine((value) => value.toLowerCase() === "delete lesson", {
+      message: "Please enter 'delete lesson' to continue.",
+    }),
+});
