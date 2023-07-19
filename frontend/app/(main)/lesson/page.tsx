@@ -52,12 +52,12 @@ const Lesson = async ({ searchParams }: LessonProps) => {
         />
       ) : null}
 
-      {ownerOnlyView && (
+      {ownerOnlyView && lesson && (
         <PageSubHeader
           heading="Questions"
           description="View and manage lesson questions"
         >
-          <LessonQuestions />
+          <LessonQuestions lesson={lesson} />
         </PageSubHeader>
       )}
     </div>

@@ -6,6 +6,7 @@ import {
   Loader2,
   Menu,
   MoreVertical,
+  Pencil,
   PlayCircle,
   PlusCircle,
   ScrollText,
@@ -30,4 +31,5 @@ export const Icons = {
   settings2: Settings2,
   trash: Trash,
   playCircle: PlayCircle,
+  pencil: Pencil,
 };

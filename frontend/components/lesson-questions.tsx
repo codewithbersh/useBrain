@@ -1,10 +1,17 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import React from "react";
-import { buttonVariants } from "./ui/button";
-import { Icons } from "./icons";
+import { cn } from "@/lib/utils";
+import { Lesson } from "@/types";
 
-const LessonQuestions = () => {
+import { Icons } from "@/components/icons";
+import { buttonVariants } from "@/components/ui/button";
+import { LessonQuestionDropdown } from "@/components/lesson-question-dropdown";
+
+interface LessonQuestionsProps {
+  lesson: Lesson;
+}
+
+const LessonQuestions = ({ lesson }: LessonQuestionsProps) => {
+  const questions = lesson.questions;
   return (
     <div className="space-y-4">
       <Link
@@ -17,6 +24,13 @@ const LessonQuestions = () => {
         <Icons.plusCircle size={16} />
         Add new question
       </Link>
+
+      {questions.map((question) => (
+        <div className="flex justify-between items-center gap-8 py-2 px-4 border-border border rounded-md">
+          <h1 className="font-bold">{question.question_text}</h1>
+          <LessonQuestionDropdown />
+        </div>
+      ))}
     </div>
   );
 };
