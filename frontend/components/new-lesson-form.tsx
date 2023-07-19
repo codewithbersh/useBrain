@@ -41,16 +41,21 @@ import { LoadingLessonSummary } from "@/components/loading-skeleton";
 interface NewLessonFormProps {
   lessonId: string | undefined;
   userId: string;
+  accessToken: string;
 }
 
-const NewLessonForm = ({ lessonId, userId }: NewLessonFormProps) => {
+const NewLessonForm = ({
+  lessonId,
+  userId,
+  accessToken,
+}: NewLessonFormProps) => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const { data: lesson, isLoading } = useQuery({
     queryKey: [lessonId],
-    queryFn: () => getLessonDetail(lessonId!),
+    queryFn: () => getLessonDetail({ lessonId: lessonId!, accessToken }),
     enabled: !!lessonId,
   });
 
@@ -113,7 +118,11 @@ const NewLessonForm = ({ lessonId, userId }: NewLessonFormProps) => {
 
   function onSubmit(values: z.infer<typeof lessonSchema>) {
     if (lesson) {
-      updateLessonMutation.mutate({ lessonId: lesson.id, ...values });
+      updateLessonMutation.mutate({
+        lessonId: lesson.id,
+        accessToken: accessToken,
+        ...values,
+      });
     } else {
       const newLesson = {
         ...values,

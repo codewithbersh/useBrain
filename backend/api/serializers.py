@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from accounts.models import User
-from .models import Category, Lesson
+from .models import Category, Lesson, Question, Choice
 
 
 class UserSerializer(ModelSerializer):
@@ -15,8 +15,23 @@ class CategorySerializer(ModelSerializer):
         fields = ["name"]
 
 
+class ChoiceSerializer(ModelSerializer):
+    class Meta:
+        model = Choice
+        fields = "__all__"
+
+
+class QuestionSerializer(ModelSerializer):
+    choices = ChoiceSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Question
+        fields = "__all__"
+
+
 class LessonSerializer(ModelSerializer):
     total_questions = SerializerMethodField()
+    questions = QuestionSerializer(many=True, read_only=True)
 
     def get_total_questions(self, obj):
         return obj.questions.count()

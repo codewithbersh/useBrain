@@ -18,9 +18,13 @@ const Lesson = async ({ searchParams }: LessonProps) => {
   const { id } = searchParams;
 
   const session = await getServerSession(authOptions);
-  const lesson = id ? await getLessonDetail(id) : null;
-
   if (!session) return null;
+  const lesson = id
+    ? await getLessonDetail({
+        lessonId: id,
+        accessToken: session.user.accessToken,
+      })
+    : null;
 
   const createOnlyView = id === undefined;
   const ownerOnlyView = lesson?.owner === session.user.info.id;
@@ -41,7 +45,11 @@ const Lesson = async ({ searchParams }: LessonProps) => {
       {!ownerOnlyView && lesson && <LessonSummary lesson={lesson} />}
 
       {ownerOnlyView || createOnlyView ? (
-        <NewLessonForm lessonId={id} userId={session.user.info.id} />
+        <NewLessonForm
+          lessonId={id}
+          userId={session.user.info.id}
+          accessToken={session.user.accessToken}
+        />
       ) : null}
 
       {ownerOnlyView && (

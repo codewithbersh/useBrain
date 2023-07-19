@@ -3,13 +3,24 @@ import { AxiosResponse } from "axios";
 import { axiosApi } from "@/lib/axios-api";
 import { Category, Lesson, NewLesson } from "@/types";
 
-export const getLessonDetail = async (
-  lessonId: string
-): Promise<Lesson | null> => {
+interface GetLessonDetailProps {
+  lessonId: string;
+  accessToken: string;
+}
+
+export const getLessonDetail = async ({
+  lessonId,
+  accessToken,
+}: GetLessonDetailProps): Promise<Lesson | null> => {
   if (!lessonId) return null;
   try {
     const res: AxiosResponse<Lesson | null> = await axiosApi.get(
-      `lessons/${lessonId}/`
+      `lessons/${lessonId}/`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
     );
 
     if (res.status === 200 || 201) {
@@ -29,6 +40,7 @@ type UpdateLessonDetailProps = {
   title: string;
   category: Category;
   isPublic: boolean;
+  accessToken: string;
 };
 
 export const updateLessonDetail = async ({
@@ -36,6 +48,7 @@ export const updateLessonDetail = async ({
   category,
   isPublic,
   lessonId,
+  accessToken,
 }: UpdateLessonDetailProps): Promise<Lesson | null> => {
   if (!lessonId) return null;
   try {
@@ -45,6 +58,11 @@ export const updateLessonDetail = async ({
         title: title,
         category: category,
         is_public: isPublic,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     );
 
@@ -62,9 +80,12 @@ export const getMyLessons = async (
   accessToken: string
 ): Promise<Array<Lesson> | null> => {
   try {
-    const res = await axiosApi.get<Lesson[]>("user-lessons/", {
+    const res = await axiosApi.get<Lesson[]>("lessons/", {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        owned: true,
       },
     });
 

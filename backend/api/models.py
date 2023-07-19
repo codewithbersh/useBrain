@@ -59,6 +59,7 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     question = models.ForeignKey(
         Question, related_name="choices", on_delete=models.CASCADE
     )

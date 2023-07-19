@@ -7,6 +7,7 @@ from .serializers import (
     LessonSerializer,
 )
 from rest_framework import exceptions
+from rest_framework.permissions import IsAuthenticated
 
 
 class UserViewSet(ModelViewSet):
@@ -25,20 +26,15 @@ class CategoryViewSet(ModelViewSet):
 
 
 class LessonViewSet(ModelViewSet):
-    queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
-
-
-class UserLessonViewSet(ModelViewSet):
-    serializer_class = LessonSerializer
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        if user.is_authenticated:
+        if "is_public" in self.request.query_params:
+            is_public = self.request.query_params.get("is_public").lower() == "true"
+            return Lesson.objects.filter(is_public=is_public)
+        elif "owned" in self.request.query_params:
             return Lesson.objects.filter(owner=user)
-        raise exceptions.AuthenticationFailed()
-
-
-class PublicLessonViewSet(ModelViewSet):
-    queryset = Lesson.objects.filter(is_public=True)
-    serializer_class = LessonSerializer
+        else:
+            return Lesson.objects.all()
