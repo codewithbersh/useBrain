@@ -32,11 +32,10 @@ export type Choice = {
 
 export type Question = {
   id: string;
-  choices: Choice[];
   created: Date;
   lesson: string;
   question_text: string;
-  type: "Multiple Choice" | "True or False";
+  choices: Choice[];
 };
 
 export type Lesson = {

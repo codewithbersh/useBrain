@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CATEGORY_CHOICES, lessonSchema } from "@/lib/schema";
 import { createLesson, updateLessonDetail } from "@/lib/lesson";
+import { Lesson } from "@/types";
 
 import {
   Select,
@@ -32,7 +33,6 @@ import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { LessonSummary } from "@/components/lesson-summary";
-import { Lesson } from "@/types";
 
 interface NewLessonFormProps {
   lessonId: string | undefined;
@@ -121,7 +121,10 @@ const NewLessonForm = ({
         owner: userId,
       };
       console.log("New Lesson: ", newLesson);
-      createLessonMutation.mutate(newLesson);
+      createLessonMutation.mutate({
+        lesson: newLesson,
+        accessToken: accessToken,
+      });
     }
   }
 

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { DeleteLessonModal } from "@/components/delete-lesson-modal";
+import { ManageQuestionModal } from "@/components/manage-question-modal";
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -14,6 +15,7 @@ const ModalProvider = () => {
   return (
     <>
       <DeleteLessonModal />
+      <ManageQuestionModal />
     </>
   );
 };

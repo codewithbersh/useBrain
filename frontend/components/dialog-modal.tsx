@@ -7,11 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import React from "react";
 
 interface ModalProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
-  description: string;
+  description?: string;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -35,7 +34,8 @@ const Modal = ({
       <DialogContent className={className} {...props}>
         <DialogHeader className="space-y-4">
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>{description}</DialogDescription>
+
+          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
         {children}
       </DialogContent>

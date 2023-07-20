@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { useManageQuestionModal } from "@/hooks/use-manage-question-modal";
+import { Question } from "@/types";
 
 import {
   DropdownMenu,
@@ -13,9 +15,17 @@ import {
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
 
-interface LessonQuestionDropdownProps {}
+interface LessonQuestionDropdownProps {
+  question: Question;
+}
 
-const LessonQuestionDropdown = ({}: LessonQuestionDropdownProps) => {
+const LessonQuestionDropdown = ({ question }: LessonQuestionDropdownProps) => {
+  const { onOpen, setQuestion } = useManageQuestionModal();
+  const handleSelectEdit = () => {
+    onOpen();
+    setQuestion(question);
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
@@ -30,7 +40,7 @@ const LessonQuestionDropdown = ({}: LessonQuestionDropdownProps) => {
         <DropdownMenuLabel className="pr-8">Question Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild onSelect={() => handleSelectEdit()}>
           <div className="space-x-3">
             <Icons.pencil size={14} />
             <span>Edit</span>

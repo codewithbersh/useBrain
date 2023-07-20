@@ -37,19 +37,11 @@ class Lesson(models.Model):
 
 
 class Question(models.Model):
-    QUESTION_TYPE = [
-        ("Multiple Choice", "Multiple Choice"),
-        ("True or False", "True or False"),
-    ]
-
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     lesson = models.ForeignKey(
         Lesson,
         on_delete=models.CASCADE,
         related_name="questions",
-    )
-    type = models.CharField(
-        max_length=128, choices=QUESTION_TYPE, default="Multiple Choice"
     )
     question_text = models.CharField(max_length=128)
     created = models.DateTimeField(auto_now_add=True)

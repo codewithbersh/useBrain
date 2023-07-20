@@ -1,11 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { cn } from "@/lib/utils";
 import { Lesson } from "@/types";
+import { useManageQuestionModal } from "@/hooks/use-manage-question-modal";
 
 import { Icons } from "@/components/icons";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { LessonQuestionDropdown } from "@/components/lesson-question-dropdown";
 
 interface LessonQuestionsProps {
@@ -13,19 +12,22 @@ interface LessonQuestionsProps {
 }
 
 const LessonQuestions = ({ lesson }: LessonQuestionsProps) => {
+  const { onOpen, setQuestion } = useManageQuestionModal();
   const questions = lesson.questions;
+  const handleAddNewQuestion = () => {
+    onOpen();
+    setQuestion(null);
+  };
   return (
     <div className="space-y-4">
-      <Link
-        href="/lesson"
-        className={cn(
-          buttonVariants({ variant: "outline" }),
-          "w-full gap-2 border-dashed text-muted-foreground"
-        )}
+      <Button
+        variant="outline"
+        className="w-full gap-2 border-dashed text-muted-foreground"
+        onClick={() => handleAddNewQuestion()}
       >
         <Icons.plusCircle size={16} />
         Add new question
-      </Link>
+      </Button>
 
       {questions.map((question) => (
         <div
@@ -33,7 +35,7 @@ const LessonQuestions = ({ lesson }: LessonQuestionsProps) => {
           className="flex justify-between items-center gap-8 py-2 px-4 border-border border rounded-md"
         >
           <h1 className="font-bold">{question.question_text}</h1>
-          <LessonQuestionDropdown />
+          <LessonQuestionDropdown question={question} />
         </div>
       ))}
     </div>

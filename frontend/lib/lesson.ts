@@ -100,9 +100,21 @@ export const getMyLessons = async (
   }
 };
 
-export const deleteMyLesson = async (lessonId: string) => {
+type DeleteMyLessonProps = {
+  lessonId: string;
+  accessToken: string;
+};
+
+export const deleteMyLesson = async ({
+  lessonId,
+  accessToken,
+}: DeleteMyLessonProps) => {
   try {
-    const res = await axiosApi.delete(`lessons/${lessonId}/`);
+    const res = await axiosApi.delete(`lessons/${lessonId}/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
     if (res.status === 200 || res.status === 201) {
       return res.data;
     } else {
@@ -114,16 +126,30 @@ export const deleteMyLesson = async (lessonId: string) => {
   }
 };
 
-export const createLesson = async (
-  lesson: NewLesson
-): Promise<Lesson | null> => {
+type CreateLessonProps = {
+  lesson: NewLesson;
+  accessToken: string;
+};
+
+export const createLesson = async ({
+  lesson,
+  accessToken,
+}: CreateLessonProps): Promise<Lesson | null> => {
   try {
-    const res = await axiosApi.post<Lesson | null>("lessons/", {
-      owner: lesson.owner,
-      category: lesson.category,
-      is_public: lesson.isPublic,
-      title: lesson.title,
-    });
+    const res = await axiosApi.post<Lesson | null>(
+      "lessons/",
+      {
+        owner: lesson.owner,
+        category: lesson.category,
+        is_public: lesson.isPublic,
+        title: lesson.title,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     if (res.status === 200 || res.status === 201) {
       return res.data;

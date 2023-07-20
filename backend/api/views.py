@@ -1,11 +1,15 @@
+from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from accounts.models import User
-from .models import Category, Lesson
+from .models import Category, Lesson, Question
 from .serializers import (
     CategorySerializer,
     UserSerializer,
     LessonSerializer,
+    QuestionSerializer,
+    ChoiceSerializer,
 )
+from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 
@@ -38,3 +42,29 @@ class LessonViewSet(ModelViewSet):
             return Lesson.objects.filter(owner=user)
         else:
             return Lesson.objects.all()
+
+
+class QuestionViewSet(ModelViewSet):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+
+    def create(self, request, *args, **kwargs):
+        question_data = request.data
+        question_serializer = QuestionSerializer(data=question_data)
+        if question_serializer.is_valid():
+            question_serializer.save()
+            question = Question.objects.get(id=question_serializer.data["id"])
+            for choice_data in request.data["choices"]:
+                choice_data["question"] = question.id
+                choice_serializer = ChoiceSerializer(data=choice_data)
+                if choice_serializer.is_valid():
+                    choice_serializer.save()
+                else:
+                    return Response(
+                        choice_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                    )
+            return Response(question_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(
+                question_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+            )
