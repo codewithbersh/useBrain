@@ -53,3 +53,9 @@ export type NewLesson = Omit<
   Lesson,
   "id" | "total_questions" | "created" | "is_public" | "questions"
 > & { isPublic: boolean };
+
+type NewChoice = Omit<Choice, "id" | "question">;
+
+export type NewQuestion = Omit<Question, "id" | "created" | "choices"> & {
+  choices: NewChoice[];
+};

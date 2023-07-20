@@ -1,7 +1,7 @@
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from accounts.models import User
-from .models import Category, Lesson, Question
+from .models import Category, Lesson, Question, Choice
 from .serializers import (
     CategorySerializer,
     UserSerializer,
@@ -44,9 +44,15 @@ class LessonViewSet(ModelViewSet):
             return Lesson.objects.all()
 
 
+class ChoiceViewSet(ModelViewSet):
+    queryset = Choice.objects.all()
+    serializer_class = ChoiceSerializer
+
+
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
+    # permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         question_data = request.data
@@ -68,3 +74,38 @@ class QuestionViewSet(ModelViewSet):
             return Response(
                 question_serializer.errors, status=status.HTTP_400_BAD_REQUEST
             )
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        question_data = request.data
+        question_serializer = self.get_serializer(
+            instance, data=question_data, partial=True
+        )
+        question_serializer.is_valid(raise_exception=True)
+        question_serializer.save()
+
+        # Updating the choices
+        choices_data = question_data.get("choices")
+        for choice_data in choices_data:
+            try:
+                choice_instance = Choice.objects.get(id=choice_data.get("id"))
+                choice_serializer = ChoiceSerializer(
+                    choice_instance, data=choice_data, partial=True
+                )
+                if choice_serializer.is_valid():
+                    choice_serializer.save()
+                else:
+                    return Response(
+                        choice_serializer.errors, status=status.HTTP_400_BAD_REQUEST
+                    )
+            except Choice.DoesNotExist:
+                return Response(
+                    {
+                        "error": "Choice with id {} does not exist.".format(
+                            choice_data.get("id")
+                        )
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        return Response(question_serializer.data)

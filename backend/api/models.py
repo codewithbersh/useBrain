@@ -49,6 +49,9 @@ class Question(models.Model):
     def __str__(self):
         return self.question_text
 
+    class Meta:
+        ordering = ["-created"]
+
 
 class Choice(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

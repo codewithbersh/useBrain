@@ -1,5 +1,6 @@
 "use client";
 
+import type { Session } from "next-auth";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -8,6 +9,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { QuestionSchema } from "@/lib/schema";
 import { useManageQuestionModal } from "@/hooks/use-manage-question-modal";
 import { cn } from "@/lib/utils";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createQuestion, updateQuestion } from "@/lib/question";
 
 import { Modal } from "@/components/dialog-modal";
 import { Button } from "@/components/ui/button";
@@ -23,16 +26,20 @@ import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DialogFooter } from "@/components/ui/dialog";
 
-const ManageQuestionModal = () => {
+interface ManageQuestionModalProps {
+  session: Session;
+}
+
+const ManageQuestionModal = ({ session }: ManageQuestionModalProps) => {
   const { isOpen, question, onClose } = useManageQuestionModal();
   const searchParams = useSearchParams();
   const lessonId = searchParams.get("id");
-  if (!lessonId) return null;
+  const queryClient = useQueryClient();
 
   const form = useForm<z.infer<typeof QuestionSchema>>({
     resolver: zodResolver(QuestionSchema),
     defaultValues: {
-      lesson: lessonId,
+      lesson: lessonId ? lessonId : undefined,
       question_text: "",
     },
     mode: "onChange",
@@ -41,10 +48,10 @@ const ManageQuestionModal = () => {
   useEffect(() => {
     if (question) {
       form.setValue("question_text", question.question_text);
-      form.setValue("lesson", lessonId);
+      form.setValue("lesson", lessonId!);
       form.reset({
         question_text: question.question_text,
-        lesson: lessonId,
+        lesson: lessonId!,
         choices: [
           {
             choice_text: question.choices[0].choice_text,
@@ -67,7 +74,7 @@ const ManageQuestionModal = () => {
     } else {
       form.reset({
         question_text: "",
-        lesson: lessonId,
+        lesson: lessonId!,
         choices: [
           { choice_text: "", is_correct: false },
           { choice_text: "", is_correct: false },
@@ -78,8 +85,69 @@ const ManageQuestionModal = () => {
     }
   }, [question, isOpen]);
 
+  const createQuestionMutation = useMutation({
+    mutationFn: createQuestion,
+    onSuccess: (value) => {
+      queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
+      queryClient.invalidateQueries({ queryKey: ["lesson", value!.lesson] });
+      onClose();
+    },
+  });
+
+  const updateQuestionMutation = useMutation({
+    mutationFn: updateQuestion,
+    onSuccess: (value) => {
+      queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
+      queryClient.invalidateQueries({ queryKey: ["lesson", value!.lesson] });
+      onClose();
+    },
+  });
+
   const onSubmit = (values: z.infer<typeof QuestionSchema>) => {
-    console.log(values);
+    if (!question) {
+      createQuestionMutation.mutate({
+        question: values,
+        accessToken: session.user.accessToken,
+      });
+    } else {
+      const newQuestion = {
+        id: question.id,
+        created: question.created,
+        lesson: values.lesson,
+        question_text: values.question_text,
+        choices: [
+          {
+            choice_text: values.choices[0].choice_text,
+            is_correct: values.choices[0].is_correct,
+            id: question.choices[0].id,
+            question: question.choices[0].question,
+          },
+
+          {
+            choice_text: values.choices[1].choice_text,
+            is_correct: values.choices[1].is_correct,
+            id: question.choices[1].id,
+            question: question.choices[1].question,
+          },
+          {
+            choice_text: values.choices[2].choice_text,
+            is_correct: values.choices[2].is_correct,
+            id: question.choices[2].id,
+            question: question.choices[2].question,
+          },
+          {
+            choice_text: values.choices[3].choice_text,
+            is_correct: values.choices[3].is_correct,
+            id: question.choices[3].id,
+            question: question.choices[3].question,
+          },
+        ],
+      };
+      updateQuestionMutation.mutate({
+        question: newQuestion,
+        accessToken: session.user.accessToken,
+      });
+    }
   };
 
   const choices = form.watch("choices");
@@ -167,7 +235,7 @@ const ManageQuestionModal = () => {
             ))}
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="gap-y-2 sm:gap-y-0">
             <Button variant="outline" onClick={onClose} type="reset">
               Cancel
             </Button>

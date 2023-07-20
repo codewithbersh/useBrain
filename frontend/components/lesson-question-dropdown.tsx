@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { useManageQuestionModal } from "@/hooks/use-manage-question-modal";
+import { useDeleteQuestionModal } from "@/hooks/use-delete-question-modal";
 import { Question } from "@/types";
 
 import {
@@ -21,9 +22,17 @@ interface LessonQuestionDropdownProps {
 
 const LessonQuestionDropdown = ({ question }: LessonQuestionDropdownProps) => {
   const { onOpen, setQuestion } = useManageQuestionModal();
+  const { onOpen: onOpenDelete, setQuestion: setQuestionDelete } =
+    useDeleteQuestionModal();
   const handleSelectEdit = () => {
     onOpen();
     setQuestion(question);
+  };
+
+  const handleSelectDelete = () => {
+    onOpenDelete();
+    setQuestionDelete(question);
+    console.log("hell");
   };
 
   return (
@@ -48,7 +57,7 @@ const LessonQuestionDropdown = ({ question }: LessonQuestionDropdownProps) => {
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild onSelect={() => handleSelectDelete()}>
           <div className="space-x-3">
             <Icons.trash size={14} /> <span>Delete</span>
           </div>

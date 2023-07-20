@@ -34,7 +34,7 @@ const LessonQuestions = ({ lesson }: LessonQuestionsProps) => {
           key={question.id}
           className="flex justify-between items-center gap-8 py-2 px-4 border-border border rounded-md"
         >
-          <h1 className="font-bold">{question.question_text}</h1>
+          <h1 className="font-medium">{question.question_text}</h1>
           <LessonQuestionDropdown question={question} />
         </div>
       ))}

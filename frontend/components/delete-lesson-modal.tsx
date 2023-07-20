@@ -1,6 +1,6 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import type { Session } from "next-auth";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -22,9 +22,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DialogFooter } from "@/components/ui/dialog";
 
-const DeleteLessonModal = () => {
-  const { data: session } = useSession();
+interface DeleteLessonModalProps {
+  session: Session;
+}
 
+const DeleteLessonModal = ({ session }: DeleteLessonModalProps) => {
   const queryClient = useQueryClient();
 
   const { isOpen, onClose, lesson } = useDeleteLessonModal();
@@ -50,8 +52,6 @@ const DeleteLessonModal = () => {
     onClose();
     form.clearErrors();
   };
-
-  if (!session) return null;
 
   const onSubmit = (values: z.infer<typeof deleteLessonSchema>) => {
     deleteLessonMutation.mutate({
