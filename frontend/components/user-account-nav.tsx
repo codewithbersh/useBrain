@@ -4,6 +4,8 @@ import Link from "next/link";
 import { signOut } from "next-auth/react";
 import { mainConfig } from "@/config/main-config";
 import { User } from "@/types";
+import { getUserInfo } from "@/lib/user";
+import { useQuery } from "@tanstack/react-query";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Icons } from "@/components/icons";
@@ -16,16 +18,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+type InitialUserData = {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  nickname: string;
+};
+
 interface UserAccountNavProps {
-  user: User | undefined;
+  user: User;
+  initialData: InitialUserData;
 }
 
-const UserAccountNav = ({ user }: UserAccountNavProps) => {
+const UserAccountNav = ({ user, initialData }: UserAccountNavProps) => {
+  const { data: userInfo } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => getUserInfo(user.accessToken),
+    initialData: initialData,
+  });
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage src={user?.image} />
+          <AvatarImage src={user.image} />
           <AvatarFallback>
             <Icons.user />
           </AvatarFallback>
@@ -33,9 +50,9 @@ const UserAccountNav = ({ user }: UserAccountNavProps) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="-translate-x-4">
         <DropdownMenuLabel>
-          <p>{user?.info.firstName}</p>
+          <p>{userInfo.nickname ? userInfo.nickname : user.name}</p>
           <p className="text-muted-foreground font-normal truncate max-w-[200px]">
-            {user?.info.email}
+            {user.info.email}
           </p>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
