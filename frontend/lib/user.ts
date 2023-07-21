@@ -95,3 +95,23 @@ export const updateUserNickname = async ({
     throw new Error(`Error: ${error}`);
   }
 };
+
+type DeleteUserProps = {
+  userId: string;
+  accessToken: string;
+};
+
+export const deleteUser = async ({ userId, accessToken }: DeleteUserProps) => {
+  try {
+    const res = await axiosApi.delete(`users/${userId}/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};

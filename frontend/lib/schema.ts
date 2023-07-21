@@ -47,3 +47,11 @@ export const NicknameSchema = z.object({
     .min(6, "Nickname must be at least 6 characters")
     .max(16, "Nickname should not be more than 12 characters"),
 });
+
+export const DeleteUserSchema = z.object({
+  verification: z
+    .string()
+    .refine((value) => value.toLowerCase() === "delete my account", {
+      message: "Please enter 'delete my account' to continue.",
+    }),
+});

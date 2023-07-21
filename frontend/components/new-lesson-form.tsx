@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,6 +50,7 @@ const NewLessonForm = ({
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const router = useRouter();
+  const [disabled, setDisabled] = useState(false);
 
   const form = useForm<z.infer<typeof lessonSchema>>({
     resolver: zodResolver(lessonSchema),
@@ -94,6 +95,7 @@ const NewLessonForm = ({
           </div>
         ),
       });
+      setDisabled(true);
     },
   });
 
@@ -101,10 +103,10 @@ const NewLessonForm = ({
     mutationFn: createLesson,
     onSuccess: (values) => {
       queryClient.invalidateQueries({ queryKey: ["my-lessons"] });
-      console.log("Values: ", values);
       if (values) {
         router.push(`/lesson?id=${values.id}`);
       }
+      setDisabled(true);
     },
   });
 
@@ -120,13 +122,22 @@ const NewLessonForm = ({
         ...values,
         owner: userId,
       };
-      console.log("New Lesson: ", newLesson);
       createLessonMutation.mutate({
         lesson: newLesson,
         accessToken: accessToken,
       });
     }
   }
+
+  useEffect(() => {
+    const timeout = 5000;
+
+    const timeoutId = setTimeout(() => {
+      setDisabled(false);
+    }, timeout);
+
+    return () => clearTimeout(timeoutId);
+  }, [disabled]);
 
   return (
     <div className="space-y-4">
@@ -215,7 +226,7 @@ const NewLessonForm = ({
               )}
             />
 
-            <Button type="submit" className="gap-2">
+            <Button type="submit" className="gap-2" disabled={disabled}>
               <Icons.loader
                 size={14}
                 className={
@@ -224,7 +235,11 @@ const NewLessonForm = ({
                     : "hidden"
                 }
               />
-              {updateLessonMutation.isLoading ? "Saving lesson" : "Save lesson"}
+              {disabled
+                ? "Saved"
+                : updateLessonMutation.isLoading
+                ? "Saving lesson"
+                : "Save lesson"}
             </Button>
           </form>
         </Form>

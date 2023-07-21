@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
+import { useDeleteUserModal } from "@/hooks/use-delete-user-modal";
 
 type User = {
   id: string;
@@ -40,6 +41,7 @@ const ManageAccountSettings = ({
 }: ManageAccountSettingsProps) => {
   const [disabled, setDisabled] = useState(false);
   const { toast } = useToast();
+  const { onOpen } = useDeleteUserModal();
 
   const queryClient = useQueryClient();
 
@@ -87,8 +89,11 @@ const ManageAccountSettings = ({
     return () => clearTimeout(timeoutId);
   }, [disabled]);
 
+  const handleDeleteModal = () => {
+    onOpen();
+  };
   return (
-    <div>
+    <div className="space-y-12">
       <div className="space-y-2 ">
         <h1 className="font-bold text-lg">Change display name</h1>
         <hr />
@@ -117,6 +122,18 @@ const ManageAccountSettings = ({
             </Button>
           </form>
         </Form>
+      </div>
+
+      <div className="space-y-2">
+        <h1 className="font-bold text-lg">Delete account</h1>
+        <hr />
+        <p className="text-muted-foreground text-sm">
+          This is a danger zone. Deleting your account will delete all of your
+          data.
+        </p>
+        <Button variant="destructive" onClick={() => handleDeleteModal()}>
+          Delete my account
+        </Button>
       </div>
     </div>
   );
