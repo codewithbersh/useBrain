@@ -87,12 +87,12 @@ const DeleteLessonModal = ({ session }: DeleteLessonModalProps) => {
                   </FormControl>
                   <FormDescription className="text-destructive bg-red-50 px-2 py-2 rounded-md">
                     Warning: This will delete{" "}
-                    <span className="font-bold ">{lesson?.title}</span>
+                    <span className="font-bold break-all">{lesson?.title}</span>
                   </FormDescription>
                 </FormItem>
               )}
             />
-            <DialogFooter>
+            <DialogFooter className="gap-2 sm:gap-0">
               <Button variant="outline" onClick={() => handleClose()}>
                 Cancel
               </Button>

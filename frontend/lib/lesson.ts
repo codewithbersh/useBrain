@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { AxiosResponse } from "axios";
+import { AxiosResponse, isAxiosError } from "axios";
 import { axiosApi } from "@/lib/axios-api";
 import { Category, Lesson, NewLesson } from "@/types";
 
@@ -159,5 +159,22 @@ export const createLesson = async ({
   } catch (error) {
     console.error(error);
     return null;
+  }
+};
+
+export const getPublicLessons = async () => {
+  try {
+    const { data, status } = await axiosApi.get<Lesson[]>("lessons/", {
+      params: { is_public: true },
+    });
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log("error message: ", error.message);
+      return error.message;
+    } else {
+      console.log("unexpected error: ", error);
+      return "An unexpected error occurred";
+    }
   }
 };

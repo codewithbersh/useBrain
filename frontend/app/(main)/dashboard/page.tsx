@@ -9,7 +9,7 @@ const DashboardPage = async () => {
   const session = await getServerSession(authOptions);
   if (!session) redirect("/login");
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 ">
       <PageHeader
         heading="Dashboard"
         description="View and manage your dashboard."

@@ -15,7 +15,7 @@ export default function MainLayout({
           <SideNav />
         </div>
 
-        <div className="w-full">{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </section>
   );

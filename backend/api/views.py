@@ -12,6 +12,7 @@ from .serializers import (
 from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count
 
 
 class UserViewSet(ModelViewSet):
@@ -31,15 +32,19 @@ class CategoryViewSet(ModelViewSet):
 
 class LessonViewSet(ModelViewSet):
     serializer_class = LessonSerializer
-    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user
         if "is_public" in self.request.query_params:
             is_public = self.request.query_params.get("is_public").lower() == "true"
-            return Lesson.objects.filter(is_public=is_public)
+            lessons = Lesson.objects.annotate(question_count=Count("questions")).filter(
+                is_public=is_public, question_count__gt=0
+            )
+            return lessons
         elif "owned" in self.request.query_params:
-            return Lesson.objects.filter(owner=user)
+            user = self.request.user
+            if user.is_authenticated:
+                return Lesson.objects.filter(owner=user)
+            raise exceptions.AuthenticationFailed()
         else:
             return Lesson.objects.all()
 
@@ -84,7 +89,6 @@ class QuestionViewSet(ModelViewSet):
         question_serializer.is_valid(raise_exception=True)
         question_serializer.save()
 
-        # Updating the choices
         choices_data = question_data.get("choices")
         for choice_data in choices_data:
             try:
