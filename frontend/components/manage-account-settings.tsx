@@ -38,8 +38,6 @@ const ManageAccountSettings = ({
   session,
   initialData,
 }: ManageAccountSettingsProps) => {
-  const userInfo = session.user.info;
-
   const [disabled, setDisabled] = useState(false);
   const { toast } = useToast();
 
