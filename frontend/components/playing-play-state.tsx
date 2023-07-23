@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Balancer } from "react-wrap-balancer";
 import { usePlayState } from "@/hooks/use-play-state";
+import { useExitGameModal } from "@/hooks/use-exit-game-modal";
 import { shuffleArray } from "@/lib/shuffle-array";
 import { Lesson, Question } from "@/types";
 
@@ -17,6 +18,7 @@ interface PlayingPlayStateProps {
 
 const PlayingPlayState = ({ lesson }: PlayingPlayStateProps) => {
   const { setPlayState } = usePlayState();
+  const { onOpen, setLessonId } = useExitGameModal();
   const [questions, setQuestions] = useState<Question[] | undefined>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -32,6 +34,11 @@ const PlayingPlayState = ({ lesson }: PlayingPlayStateProps) => {
 
     setQuestions(shuffleArray(shuffledQuestions));
   }, []);
+
+  const handleExitButton = () => {
+    onOpen();
+    setLessonId(lesson.id);
+  };
 
   if (!questions || questions.length === 0) return null;
 
@@ -71,7 +78,12 @@ const PlayingPlayState = ({ lesson }: PlayingPlayStateProps) => {
 
   return (
     <div className="container py-8 relative">
-      <Button variant="ghost" size="icon" className="-translate-x-4">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="-translate-x-4"
+        onClick={() => handleExitButton()}
+      >
         <Icons.chevronLeft size={20} />
       </Button>
       <div className="max-w-2xl mx-auto space-y-6">

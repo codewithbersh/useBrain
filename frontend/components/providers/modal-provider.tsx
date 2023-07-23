@@ -7,6 +7,7 @@ import { DeleteLessonModal } from "@/components/delete-lesson-modal";
 import { ManageQuestionModal } from "@/components/manage-question-modal";
 import { DeleteQuestionModal } from "@/components/delete-question-modal";
 import { DeleteUserModal } from "@/components/delete-user-modal";
+import { ExitGameModal } from "@/components/exit-game-modal";
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -24,6 +25,7 @@ const ModalProvider = () => {
       <ManageQuestionModal session={session} />
       <DeleteQuestionModal session={session} />
       <DeleteUserModal session={session} />
+      <ExitGameModal />
     </>
   );
 };
