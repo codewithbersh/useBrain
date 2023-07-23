@@ -32,7 +32,6 @@ const LessonQuestionDropdown = ({ question }: LessonQuestionDropdownProps) => {
   const handleSelectDelete = () => {
     onOpenDelete();
     setQuestionDelete(question);
-    console.log("hell");
   };
 
   return (
