@@ -47,11 +47,17 @@ export type Lesson = {
   owner: string;
   total_questions: number;
   questions: Question[];
+  total_plays: number;
 };
 
 export type NewLesson = Omit<
   Lesson,
-  "id" | "total_questions" | "created" | "is_public" | "questions"
+  | "id"
+  | "total_questions"
+  | "created"
+  | "is_public"
+  | "questions"
+  | "total_plays"
 > & { isPublic: boolean };
 
 type NewChoice = Omit<Choice, "id" | "question">;
@@ -70,11 +76,3 @@ export type History = {
 };
 
 export type NewHistory = Omit<History, "id" | "date_played">;
-
-// class History(models.Model):
-//     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-//     player = models.ForeignKey(User, related_name="history", on_delete=models.CASCADE)
-//     lesson = models.ForeignKey(Lesson, related_name="history", on_delete=models.CASCADE)
-//     total_questions = models.PositiveSmallIntegerField()
-//     total_correct_answers = models.PositiveSmallIntegerField()
-//     date_played = models.DateTimeField(auto_now_add=True)

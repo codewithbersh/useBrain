@@ -1,10 +1,10 @@
+import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { getUserInfo } from "@/lib/user";
 
 import { PageHeader } from "@/components/page-header";
 import { ManageAccountSettings } from "@/components/manage-account-settings";
-import { getUserInfo } from "@/lib/user";
 
 export const revalidate = 0;
 

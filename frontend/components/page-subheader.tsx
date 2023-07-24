@@ -1,25 +1,13 @@
-import { cn } from "@/lib/utils";
-
 interface PageSubHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   heading: string;
   description?: string;
-  children: React.ReactNode;
 }
 
-const PageSubHeader = ({
-  heading,
-  description,
-  className,
-  children,
-}: PageSubHeaderProps) => {
+const PageSubHeader = ({ heading, description }: PageSubHeaderProps) => {
   return (
-    <div className={cn("space-y-6", className)}>
-      <div className="space-y-2">
-        <h1 className="font-bold text-xl leading-none">{heading}</h1>
-        {description && <p className="text-muted-foreground">{description}</p>}
-      </div>
-
-      <div>{children}</div>
+    <div>
+      <h1 className="font-bold text-lg">{heading}</h1>
+      {description && <p className="text-muted-foreground">{description}</p>}
     </div>
   );
 };

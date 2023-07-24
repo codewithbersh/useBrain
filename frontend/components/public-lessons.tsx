@@ -30,7 +30,7 @@ const PublicLessons = ({ initialData }: PublicLessonsProps) => {
                 <Badge variant="secondary" className="w-fit">
                   {lesson.category}
                 </Badge>
-                <CardTitle className="leading-[1.2] h-[86.4px]">
+                <CardTitle className="leading-[1.4] h-[100.78px] ">
                   {lesson.title}
                 </CardTitle>
               </CardHeader>

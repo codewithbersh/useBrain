@@ -1,32 +1,44 @@
 "use client";
 
+import { useEffect } from "react";
 import type { Session } from "next-auth";
 import { useQuery } from "@tanstack/react-query";
 import { getLessonDetail } from "@/lib/lesson";
+import { Lesson } from "@/types";
 
 import { LessonSummary } from "@/components/lesson-summary";
 import { NewLessonForm } from "@/components/new-lesson-form";
-import { PageSubHeader } from "@/components/page-subheader";
 import { LessonQuestions } from "@/components/lesson-questions";
+import { usePlayState } from "@/hooks/use-play-state";
 
 interface LessonClientContainerProps {
   id: string | undefined;
   session: Session;
+  initialData: Lesson | null;
 }
 
-const LessonClientContainer = ({ id, session }: LessonClientContainerProps) => {
+const LessonClientContainer = ({
+  id,
+  session,
+  initialData,
+}: LessonClientContainerProps) => {
   const accessToken = session.user.accessToken;
+  const { setPlayState } = usePlayState();
+  useEffect(() => {
+    setPlayState("initial");
+  }, []);
   const { data: lesson } = useQuery({
     queryKey: ["lesson", id],
     queryFn: () => getLessonDetail({ lessonId: id!, accessToken }),
     enabled: !!id,
+    initialData: initialData,
   });
   const createOnlyView = id === undefined;
   const ownerOnlyView = lesson?.owner === session.user.info.id;
 
   return (
-    <>
-      {!ownerOnlyView && lesson && <LessonSummary lesson={lesson} />}
+    <div className="space-y-16">
+      {lesson && <LessonSummary lesson={lesson} />}
       {ownerOnlyView || createOnlyView ? (
         <NewLessonForm
           lessonId={id}
@@ -35,15 +47,8 @@ const LessonClientContainer = ({ id, session }: LessonClientContainerProps) => {
           lesson={lesson}
         />
       ) : null}
-      {ownerOnlyView && lesson && (
-        <PageSubHeader
-          heading="Questions"
-          description="View and manage lesson questions"
-        >
-          <LessonQuestions lesson={lesson} />
-        </PageSubHeader>
-      )}
-    </>
+      {ownerOnlyView && lesson && <LessonQuestions lesson={lesson} />}
+    </div>
   );
 };
 

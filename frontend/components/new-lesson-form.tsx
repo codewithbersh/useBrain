@@ -32,7 +32,6 @@ import { Switch } from "@/components/ui/switch";
 import { Icons } from "@/components/icons";
 import { useToast } from "@/components/ui/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { LessonSummary } from "@/components/lesson-summary";
 
 interface NewLessonFormProps {
   lessonId: string | undefined;
@@ -140,111 +139,100 @@ const NewLessonForm = ({
   }, [disabled]);
 
   return (
-    <div className="space-y-4">
-      <LessonSummary lesson={lesson} />
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 max-w-[500px]"
+      >
+        <FormField
+          control={form.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Title</FormLabel>
+              <FormControl>
+                <Input placeholder="Lesson title" {...field} />
+              </FormControl>
+              <FormDescription>What is this lesson all about?</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-      <div className=" border-border border rounded-md w-full p-4 sm:p-8">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8 max-w-[500px]"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Lesson title" {...field} />
-                  </FormControl>
-                  <FormDescription>
-                    What is this lesson all about?
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="category"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    onValueChange={(value) =>
-                      field.onChange(
-                        value as
-                          | "General Knowledge"
-                          | "Sports"
-                          | "Science"
-                          | "Others"
-                      )
-                    }
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue>
-                          {field.value || "Select a category"}
-                        </SelectValue>
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {CATEGORY_CHOICES.map((value, index) => (
-                        <SelectItem key={index} value={value}>
-                          {value}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="isPublic"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Make public</FormLabel>
-                    <FormDescription>
-                      Make it public if you want others to view/play this
-                      lesson.
-                    </FormDescription>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
-            <Button type="submit" className="gap-2" disabled={disabled}>
-              <Icons.loader
-                size={14}
-                className={
-                  updateLessonMutation.isLoading
-                    ? "block animate-spin"
-                    : "hidden"
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Category</FormLabel>
+              <Select
+                onValueChange={(value) =>
+                  field.onChange(
+                    value as
+                      | "General Knowledge"
+                      | "Sports"
+                      | "Science"
+                      | "Others"
+                  )
                 }
-              />
-              {disabled
-                ? "Saved"
-                : updateLessonMutation.isLoading
-                ? "Saving lesson"
-                : "Save lesson"}
-            </Button>
-          </form>
-        </Form>
-      </div>
-    </div>
+                defaultValue={field.value}
+              >
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue>
+                      {field.value || "Select a category"}
+                    </SelectValue>
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {CATEGORY_CHOICES.map((value, index) => (
+                    <SelectItem key={index} value={value}>
+                      {value}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name="isPublic"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <FormLabel className="text-base">Make public</FormLabel>
+                <FormDescription>
+                  Make it public if you want others to view/play this lesson.
+                </FormDescription>
+              </div>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="gap-2" disabled={disabled}>
+          <Icons.loader
+            size={14}
+            className={
+              updateLessonMutation.isLoading ? "block animate-spin" : "hidden"
+            }
+          />
+          {disabled
+            ? "Saved"
+            : updateLessonMutation.isLoading
+            ? "Saving lesson"
+            : "Save lesson"}
+        </Button>
+      </form>
+    </Form>
   );
 };
 

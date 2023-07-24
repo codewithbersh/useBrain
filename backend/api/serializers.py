@@ -31,10 +31,14 @@ class QuestionSerializer(ModelSerializer):
 
 class LessonSerializer(ModelSerializer):
     total_questions = SerializerMethodField()
+    total_plays = SerializerMethodField()
     questions = QuestionSerializer(many=True, read_only=True)
 
     def get_total_questions(self, obj):
         return obj.questions.count()
+
+    def get_total_plays(self, obj):
+        return obj.history.count()
 
     class Meta:
         model = Lesson

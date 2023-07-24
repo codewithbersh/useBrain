@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { getMyLessons } from "@/lib/lesson";
+import { Lesson } from "@/types";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
@@ -11,13 +12,15 @@ import { MyLesson } from "@/components/my-lesson";
 
 interface MyLessonsProps {
   accessToken: string;
+  initialData: Lesson[] | null;
 }
 
-const MyLessons = ({ accessToken }: MyLessonsProps) => {
+const MyLessons = ({ accessToken, initialData }: MyLessonsProps) => {
   const { data: lessons } = useQuery({
     queryKey: ["my-lessons"],
     queryFn: () => getMyLessons(accessToken),
     enabled: !!accessToken,
+    initialData: initialData,
   });
 
   return (

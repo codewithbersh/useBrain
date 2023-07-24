@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Lesson } from "@/types";
 import { usePlayState } from "@/hooks/use-play-state";
+import { Balancer } from "react-wrap-balancer";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -22,14 +23,22 @@ const LessonSummary = ({ lesson }: LessonSummaryProps) => {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <h1 className="text-lg font-bold">{lesson.title}</h1>
-        <div className="flex gap-2">
-          <Badge variant="outline">{lesson.category}</Badge>
-        </div>
+    <div className="flex flex-col border-border p-4 border rounded-md space-y-4">
+      <h1 className="text-lg font-bold  ">
+        <Balancer>{lesson.title}</Balancer>
+      </h1>
+      <div className="flex gap-4">
+        <Badge variant="secondary">{lesson.category}</Badge>
+        <Badge variant="secondary">
+          {lesson.total_questions}{" "}
+          {lesson.total_questions > 1 ? "Questions" : "Question"}
+        </Badge>
       </div>
-      <Button size="sm" variant="outline" onClick={() => handlePlayLesson()}>
+      <Button
+        className="shrink-0 gap-2"
+        size="sm"
+        onClick={() => handlePlayLesson()}
+      >
         Play lesson
       </Button>
     </div>

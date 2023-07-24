@@ -117,14 +117,16 @@ class HistoryViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = History.objects.all()
+        user = self.request.user
 
-        my_history = self.request.query_params.get("user_id", None)
+        my_history = self.request.query_params.get("my_history", None)
         lesson_id = self.request.query_params.get("lesson_id", None)
 
         if my_history is not None and lesson_id is not None:
-            user = self.request.user
             return queryset.filter(player=user, lesson__id=lesson_id)
         if lesson_id is not None:
             return queryset.filter(lesson__id=lesson_id)
+        if my_history is not None:
+            return queryset.filter(player=user)
 
         return queryset

@@ -1,9 +1,9 @@
+import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getLessonDetail } from "@/lib/lesson";
 
 import { PageHeader } from "@/components/page-header";
-import { redirect } from "next/navigation";
 import { LessonClientContainer } from "@/components/lesson-client-container";
 
 interface LessonProps {
@@ -40,7 +40,7 @@ const Lesson = async ({ searchParams }: LessonProps) => {
         }
       />
 
-      <LessonClientContainer id={id} session={session} />
+      <LessonClientContainer id={id} session={session} initialData={lesson} />
     </div>
   );
 };
