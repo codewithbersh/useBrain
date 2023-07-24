@@ -1,9 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Lesson } from "@/types";
 import { useDeleteLessonModal } from "@/hooks/use-delete-lesson-modal";
+import { usePlayState } from "@/hooks/use-play-state";
 
 import {
   DropdownMenu,
@@ -22,10 +24,16 @@ interface LessonOptionsDropdownProps {
 
 const LessonOptionsDropdown = ({ lesson }: LessonOptionsDropdownProps) => {
   const { onOpen, setLesson } = useDeleteLessonModal();
-
+  const { setPlayState } = usePlayState();
+  const router = useRouter();
   const handleSelectDelete = () => {
     onOpen();
     setLesson(lesson);
+  };
+
+  const handleSelectPlay = (id: string) => {
+    setPlayState("initial");
+    router.push(`/play?id=${id}`);
   };
 
   return (
@@ -42,10 +50,10 @@ const LessonOptionsDropdown = ({ lesson }: LessonOptionsDropdownProps) => {
         <DropdownMenuLabel className="pr-8">Lesson Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild>
-          <Link href={`/lesson?id=${lesson.id}`} className="space-x-3">
+        <DropdownMenuItem asChild onSelect={() => handleSelectPlay(lesson.id)}>
+          <div className="space-x-3">
             <Icons.playCircle size={14} /> <span>Play</span>
-          </Link>
+          </div>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href={`/lesson?id=${lesson.id}`} className="space-x-3">

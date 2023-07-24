@@ -11,19 +11,35 @@ import { Lesson, Question } from "@/types";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Icons } from "@/components/icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { newHistory } from "@/lib/history";
+import { useSession } from "next-auth/react";
+import { Session } from "next-auth/core/types";
+import { useNewHistory } from "@/hooks/use-new-history";
 
 interface PlayingPlayStateProps {
   lesson: Lesson;
+  session: Session;
 }
 
-const PlayingPlayState = ({ lesson }: PlayingPlayStateProps) => {
+const PlayingPlayState = ({ lesson, session }: PlayingPlayStateProps) => {
   const { setPlayState } = usePlayState();
   const { onOpen, setLessonId } = useExitGameModal();
+  const { setHistory } = useNewHistory();
   const [questions, setQuestions] = useState<Question[] | undefined>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [answerSubmitted, setAnswerSubmitted] = useState(false);
   const [score, setScore] = useState(0);
+  const queryClient = useQueryClient();
+
+  const newHistoryMutation = useMutation({
+    mutationFn: newHistory,
+    onSuccess: (values) => {
+      queryClient.invalidateQueries({ queryKey: ["history", lesson.id] });
+      setHistory(values);
+    },
+  });
 
   useEffect(() => {
     const shuffledQuestions = JSON.parse(JSON.stringify(lesson.questions));
@@ -68,6 +84,16 @@ const PlayingPlayState = ({ lesson }: PlayingPlayStateProps) => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
+      const history = {
+        player: session.user.info.id,
+        lesson: lesson.id,
+        total_questions: questions.length,
+        total_correct_answers: score,
+      };
+      newHistoryMutation.mutate({
+        history: history,
+        accessToken: session.user.accessToken,
+      });
       setPlayState("gameOver");
     }
   };

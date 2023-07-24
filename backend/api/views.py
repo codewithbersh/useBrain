@@ -1,13 +1,14 @@
 from rest_framework import status
 from rest_framework.viewsets import ModelViewSet
 from accounts.models import User
-from .models import Category, Lesson, Question, Choice
+from .models import Category, Lesson, Question, Choice, History
 from .serializers import (
     CategorySerializer,
     UserSerializer,
     LessonSerializer,
     QuestionSerializer,
     ChoiceSerializer,
+    HistorySerializer,
 )
 from rest_framework.response import Response
 from rest_framework import exceptions
@@ -48,11 +49,6 @@ class LessonViewSet(ModelViewSet):
             raise exceptions.AuthenticationFailed()
         else:
             return Lesson.objects.all()
-
-
-class ChoiceViewSet(ModelViewSet):
-    queryset = Choice.objects.all()
-    serializer_class = ChoiceSerializer
 
 
 class QuestionViewSet(ModelViewSet):
@@ -114,3 +110,21 @@ class QuestionViewSet(ModelViewSet):
                 )
 
         return Response(question_serializer.data)
+
+
+class HistoryViewSet(ModelViewSet):
+    serializer_class = HistorySerializer
+
+    def get_queryset(self):
+        queryset = History.objects.all()
+
+        my_history = self.request.query_params.get("user_id", None)
+        lesson_id = self.request.query_params.get("lesson_id", None)
+
+        if my_history is not None and lesson_id is not None:
+            user = self.request.user
+            return queryset.filter(player=user, lesson__id=lesson_id)
+        if lesson_id is not None:
+            return queryset.filter(lesson__id=lesson_id)
+
+        return queryset

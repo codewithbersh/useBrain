@@ -197,3 +197,18 @@ export const getPublicLesson = async (id: string) => {
     }
   }
 };
+
+export const getLesson = async (id: string) => {
+  try {
+    const { data } = await axiosApi.get<Lesson>(`lessons/${id}/`);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error)) {
+      console.log("error message: ", error.message);
+      return error.message;
+    } else {
+      console.log("unexpected error: ", error);
+      return "An unexpected error occurred";
+    }
+  }
+};

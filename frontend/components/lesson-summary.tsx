@@ -1,16 +1,25 @@
-import Link from "next/link";
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Lesson } from "@/types";
-import { cn } from "@/lib/utils";
+import { usePlayState } from "@/hooks/use-play-state";
 
 import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 interface LessonSummaryProps {
   lesson: Lesson | null | undefined;
 }
 
 const LessonSummary = ({ lesson }: LessonSummaryProps) => {
+  const { setPlayState } = usePlayState();
+  const router = useRouter();
   if (!lesson) return null;
+
+  const handlePlayLesson = () => {
+    setPlayState("initial");
+    router.push(`/play?id=${lesson.id}`);
+  };
 
   return (
     <div className="space-y-4">
@@ -20,12 +29,9 @@ const LessonSummary = ({ lesson }: LessonSummaryProps) => {
           <Badge variant="outline">{lesson.category}</Badge>
         </div>
       </div>
-      <Link
-        href={`/play?id=${lesson.id}`}
-        className={cn(buttonVariants({ size: "sm", variant: "outline" }))}
-      >
+      <Button size="sm" variant="outline" onClick={() => handlePlayLesson()}>
         Play lesson
-      </Link>
+      </Button>
     </div>
   );
 };

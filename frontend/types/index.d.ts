@@ -59,3 +59,22 @@ type NewChoice = Omit<Choice, "id" | "question">;
 export type NewQuestion = Omit<Question, "id" | "created" | "choices"> & {
   choices: NewChoice[];
 };
+
+export type History = {
+  id: string;
+  player: string;
+  lesson: string;
+  total_questions: number;
+  total_correct_answers: number;
+  date_played: Date;
+};
+
+export type NewHistory = Omit<History, "id" | "date_played">;
+
+// class History(models.Model):
+//     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+//     player = models.ForeignKey(User, related_name="history", on_delete=models.CASCADE)
+//     lesson = models.ForeignKey(Lesson, related_name="history", on_delete=models.CASCADE)
+//     total_questions = models.PositiveSmallIntegerField()
+//     total_correct_answers = models.PositiveSmallIntegerField()
+//     date_played = models.DateTimeField(auto_now_add=True)

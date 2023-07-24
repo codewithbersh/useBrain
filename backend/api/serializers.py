@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from accounts.models import User
-from .models import Category, Lesson, Question, Choice
+from .models import Category, Lesson, Question, Choice, History
 
 
 class UserSerializer(ModelSerializer):
@@ -38,4 +38,10 @@ class LessonSerializer(ModelSerializer):
 
     class Meta:
         model = Lesson
+        fields = "__all__"
+
+
+class HistorySerializer(ModelSerializer):
+    class Meta:
+        model = History
         fields = "__all__"

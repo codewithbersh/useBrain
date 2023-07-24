@@ -1,6 +1,7 @@
 import uuid
 from django.db import models
 from accounts.models import User
+from django.utils import timezone
 
 
 class Category(models.Model):
@@ -63,3 +64,18 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.choice_text
+
+
+class History(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    player = models.ForeignKey(User, related_name="history", on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, related_name="history", on_delete=models.CASCADE)
+    total_questions = models.PositiveSmallIntegerField()
+    total_correct_answers = models.PositiveSmallIntegerField()
+    date_played = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.player}: {self.total_questions}/{self.total_correct_answers}"
+
+    class Meta:
+        ordering = ["total_correct_answers"]
