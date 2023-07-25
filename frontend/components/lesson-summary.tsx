@@ -38,6 +38,7 @@ const LessonSummary = ({ lesson }: LessonSummaryProps) => {
         className="shrink-0 gap-2"
         size="sm"
         onClick={() => handlePlayLesson()}
+        disabled={lesson.questions.length === 0}
       >
         Play lesson
       </Button>

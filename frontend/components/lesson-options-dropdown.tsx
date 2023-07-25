@@ -50,7 +50,11 @@ const LessonOptionsDropdown = ({ lesson }: LessonOptionsDropdownProps) => {
         <DropdownMenuLabel className="pr-8">Lesson Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem asChild onSelect={() => handleSelectPlay(lesson.id)}>
+        <DropdownMenuItem
+          asChild
+          onSelect={() => handleSelectPlay(lesson.id)}
+          disabled={lesson.questions.length === 0}
+        >
           <div className="space-x-3">
             <Icons.playCircle size={14} /> <span>Play</span>
           </div>
