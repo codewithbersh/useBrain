@@ -19,7 +19,9 @@ const LoginButton = () => {
         <Button
           className="w-full gap-2"
           onClick={() =>
-            signIn("google", { callbackUrl: "http://localhost:3000/dashboard" })
+            signIn("google", {
+              callbackUrl: `${window.location.origin}/dashboard`,
+            })
           }
         >
           <svg
