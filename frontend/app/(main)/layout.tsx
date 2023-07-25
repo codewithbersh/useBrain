@@ -17,6 +17,8 @@ export default function MainLayout({
 
         <div className="flex-1 overflow-hidden pl-1">{children}</div>
       </div>
+
+      <div className=" h-16 w-full" />
     </section>
   );
 }

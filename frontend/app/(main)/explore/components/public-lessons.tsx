@@ -30,15 +30,17 @@ const PublicLessons = ({ initialData }: PublicLessonsProps) => {
                 <Badge variant="secondary" className="w-fit">
                   {lesson.category}
                 </Badge>
-                <CardTitle className="leading-[1.3]">{lesson.title}</CardTitle>
+                <CardTitle className="leading-[1.3] h-[93.59px] overflow-hidden">
+                  {lesson.title}
+                </CardTitle>
               </CardHeader>
               <CardFooter className="flex gap-8">
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center shrink-0">
                   <Icons.scrollText size={14} />
                   <small>{lesson.total_questions} Questions</small>
                 </div>
 
-                <div className="flex gap-2 items-center">
+                <div className="flex gap-2 items-center shrink-0">
                   <Icons.playCircle size={14} />
                   <small>{lesson.total_plays} Plays</small>
                 </div>
