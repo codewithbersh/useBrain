@@ -20,7 +20,7 @@ const LoginButton = () => {
           className="w-full gap-2"
           onClick={() =>
             signIn("google", {
-              callbackUrl: `${window.location.origin}/dashboard`,
+              callbackUrl: "/dashboard",
             })
           }
         >
