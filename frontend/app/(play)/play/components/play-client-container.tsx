@@ -4,9 +4,9 @@ import { usePlayState } from "@/hooks/use-play-state";
 import { Session } from "next-auth/core/types";
 import { Lesson } from "@/types";
 
-import { InitialPlayState } from "@/components/initial-play-state";
-import { PlayingPlayState } from "@/components/playing-play-state";
-import { GameOverState } from "@/components/game-over-state";
+import { InitialPlayState } from "./initial-play-state";
+import { PlayingPlayState } from "./playing-play-state";
+import { GameOverState } from "./game-over-state";
 
 interface PlayClientContainerProps {
   lesson: Lesson;

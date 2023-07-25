@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getLessonDetail } from "@/lib/lesson";
 
 import { PageHeader } from "@/components/page-header";
-import { LessonClientContainer } from "@/components/lesson-client-container";
+import { LessonClientContainer } from "./components/lesson-client-container";
 
 interface LessonProps {
   searchParams: {

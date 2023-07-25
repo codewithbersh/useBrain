@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import { getLesson } from "@/lib/lesson";
 import { authOptions } from "@/lib/auth";
 
-import { PlayClientContainer } from "@/components/play-client-container";
+import { PlayClientContainer } from "./components/play-client-container";
 
 interface PlayPageProps {
   searchParams: {

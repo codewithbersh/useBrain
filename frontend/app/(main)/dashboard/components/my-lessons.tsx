@@ -8,7 +8,7 @@ import { Lesson } from "@/types";
 
 import { buttonVariants } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { MyLesson } from "@/components/my-lesson";
+import { MyLesson } from "./my-lesson";
 
 interface MyLessonsProps {
   accessToken: string;

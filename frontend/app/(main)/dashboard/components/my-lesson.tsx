@@ -1,6 +1,6 @@
 import { Lesson } from "@/types";
 
-import { LessonOptionsDropdown } from "@/components/lesson-options-dropdown";
+import { LessonOptionsDropdown } from "./lesson-options-dropdown";
 import { Card } from "@/components/ui/card";
 
 interface MyLessonProps {

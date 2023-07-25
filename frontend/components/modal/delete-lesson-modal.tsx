@@ -9,7 +9,7 @@ import { useDeleteLessonModal } from "@/hooks/use-delete-lesson-modal";
 import { deleteMyLesson } from "@/lib/lesson";
 import { deleteLessonSchema } from "@/lib/schema";
 
-import { Modal } from "@/components/dialog-modal";
+import { Modal } from "@/components/modal/dialog-modal";
 import {
   Form,
   FormControl,

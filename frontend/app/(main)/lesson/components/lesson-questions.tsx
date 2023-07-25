@@ -5,7 +5,7 @@ import { useManageQuestionModal } from "@/hooks/use-manage-question-modal";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
-import { LessonQuestionDropdown } from "@/components/lesson-question-dropdown";
+import { LessonQuestionDropdown } from "./lesson-question-dropdown";
 import { PageSubHeader } from "@/components/page-subheader";
 
 interface LessonQuestionsProps {

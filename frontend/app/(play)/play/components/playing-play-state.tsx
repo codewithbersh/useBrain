@@ -13,7 +13,6 @@ import { Progress } from "@/components/ui/progress";
 import { Icons } from "@/components/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { newHistory } from "@/lib/history";
-import { useSession } from "next-auth/react";
 import { Session } from "next-auth/core/types";
 import { useNewHistory } from "@/hooks/use-new-history";
 

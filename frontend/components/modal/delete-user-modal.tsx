@@ -17,7 +17,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-import { Modal } from "@/components/dialog-modal";
+import { Modal } from "@/components/modal/dialog-modal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";

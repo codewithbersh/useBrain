@@ -3,7 +3,7 @@ import { authOptions } from "@/lib/auth";
 import { getMyLessons } from "@/lib/lesson";
 import { getServerSession } from "next-auth";
 
-import { MyLessons } from "@/components/my-lessons";
+import { MyLessons } from "./components/my-lessons";
 import { PageHeader } from "@/components/page-header";
 import { PageSubHeader } from "@/components/page-subheader";
 

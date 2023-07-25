@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useExitGameModal } from "@/hooks/use-exit-game-modal";
 
-import { Modal } from "@/components/dialog-modal";
+import { Modal } from "@/components/modal/dialog-modal";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 

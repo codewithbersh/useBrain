@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { getUserInfo } from "@/lib/user";
 
 import { PageHeader } from "@/components/page-header";
-import { ManageAccountSettings } from "@/components/manage-account-settings";
+import { ManageAccountSettings } from "./components/manage-account-settings";
 
 export const revalidate = 0;
 

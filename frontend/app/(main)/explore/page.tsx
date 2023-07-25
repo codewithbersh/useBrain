@@ -1,7 +1,7 @@
 import { getPublicLessons } from "@/lib/lesson";
 
 import { PageHeader } from "@/components/page-header";
-import { PublicLessons } from "@/components/public-lessons";
+import { PublicLessons } from "./components/public-lessons";
 
 const ExplorePage = async () => {
   const initialData = await getPublicLessons();

@@ -3,7 +3,7 @@ import { useDeleteQuestionModal } from "@/hooks/use-delete-question-modal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteQuestion } from "@/lib/question";
 
-import { Modal } from "@/components/dialog-modal";
+import { Modal } from "@/components/modal/dialog-modal";
 import { DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 

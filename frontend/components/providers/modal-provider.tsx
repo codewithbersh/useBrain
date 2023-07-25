@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 
-import { DeleteLessonModal } from "@/components/delete-lesson-modal";
-import { ManageQuestionModal } from "@/components/manage-question-modal";
-import { DeleteQuestionModal } from "@/components/delete-question-modal";
-import { DeleteUserModal } from "@/components/delete-user-modal";
-import { ExitGameModal } from "@/components/exit-game-modal";
+import { DeleteLessonModal } from "@/components/modal/delete-lesson-modal";
+import { ManageQuestionModal } from "@/components/modal/manage-question-modal";
+import { DeleteQuestionModal } from "@/components/modal/delete-question-modal";
+import { DeleteUserModal } from "@/components/modal/delete-user-modal";
+import { ExitGameModal } from "@/components/modal/exit-game-modal";
 
 const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);

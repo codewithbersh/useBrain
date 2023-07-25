@@ -6,9 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import { getLessonDetail } from "@/lib/lesson";
 import { Lesson } from "@/types";
 
-import { LessonSummary } from "@/components/lesson-summary";
-import { NewLessonForm } from "@/components/new-lesson-form";
-import { LessonQuestions } from "@/components/lesson-questions";
+import { LessonSummary } from "./lesson-summary";
+import { NewLessonForm } from "./new-lesson-form";
+import { LessonQuestions } from "./lesson-questions";
 import { usePlayState } from "@/hooks/use-play-state";
 
 interface LessonClientContainerProps {

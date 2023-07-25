@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createQuestion, updateQuestion } from "@/lib/question";
 
-import { Modal } from "@/components/dialog-modal";
+import { Modal } from "@/components/modal/dialog-modal";
 import { Button } from "@/components/ui/button";
 import {
   Form,
