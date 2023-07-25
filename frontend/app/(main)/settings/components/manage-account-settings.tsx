@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NicknameSchema } from "@/lib/schema";
 import { z } from "zod";
+import { useDeleteUserModal } from "@/hooks/use-delete-user-modal";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -20,7 +21,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useDeleteUserModal } from "@/hooks/use-delete-user-modal";
 
 type User = {
   id: string;

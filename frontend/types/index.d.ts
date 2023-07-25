@@ -76,3 +76,21 @@ export type History = {
 };
 
 export type NewHistory = Omit<History, "id" | "date_played">;
+
+export type MyHistory = Omit<History, "player" | "lesson"> & {
+  player: {
+    id: string;
+    email: string;
+    first_name: string;
+    last_name: string;
+    nickname: string;
+  };
+  lesson: {
+    id: string;
+    category: string;
+    title: string;
+    is_public: boolean;
+    created: string;
+    owner: string;
+  };
+};

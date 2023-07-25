@@ -30,9 +30,7 @@ const PublicLessons = ({ initialData }: PublicLessonsProps) => {
                 <Badge variant="secondary" className="w-fit">
                   {lesson.category}
                 </Badge>
-                <CardTitle className="leading-[1.4] h-[100.78px] ">
-                  {lesson.title}
-                </CardTitle>
+                <CardTitle className="leading-[1.3]">{lesson.title}</CardTitle>
               </CardHeader>
               <CardFooter className="flex gap-8">
                 <div className="flex gap-2 items-center">
@@ -42,7 +40,7 @@ const PublicLessons = ({ initialData }: PublicLessonsProps) => {
 
                 <div className="flex gap-2 items-center">
                   <Icons.playCircle size={14} />
-                  <small>{lesson.total_questions} Plays</small>
+                  <small>{lesson.total_plays} Plays</small>
                 </div>
               </CardFooter>
             </Card>

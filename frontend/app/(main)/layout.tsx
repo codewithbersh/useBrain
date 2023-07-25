@@ -15,7 +15,7 @@ export default function MainLayout({
           <SideNav />
         </div>
 
-        <div className="flex-1">{children}</div>
+        <div className="flex-1 overflow-hidden pl-1">{children}</div>
       </div>
     </section>
   );

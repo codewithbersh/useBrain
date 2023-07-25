@@ -5,11 +5,13 @@ import type { Session } from "next-auth";
 import { useQuery } from "@tanstack/react-query";
 import { getLessonDetail } from "@/lib/lesson";
 import { Lesson } from "@/types";
+import { getLessonHistory } from "@/lib/history";
+import { usePlayState } from "@/hooks/use-play-state";
 
 import { LessonSummary } from "./lesson-summary";
 import { NewLessonForm } from "./new-lesson-form";
 import { LessonQuestions } from "./lesson-questions";
-import { usePlayState } from "@/hooks/use-play-state";
+import { LessonHistory } from "./lesson-history";
 
 interface LessonClientContainerProps {
   id: string | undefined;
@@ -36,6 +38,12 @@ const LessonClientContainer = ({
   const createOnlyView = id === undefined;
   const ownerOnlyView = lesson?.owner === session.user.info.id;
 
+  const { data: history } = useQuery({
+    queryKey: ["history", lesson?.id],
+    queryFn: () => getLessonHistory({ lessonId: lesson!.id }),
+    enabled: !!lesson,
+  });
+
   return (
     <div className="space-y-16">
       {lesson && <LessonSummary lesson={lesson} />}
@@ -48,6 +56,9 @@ const LessonClientContainer = ({
         />
       ) : null}
       {ownerOnlyView && lesson && <LessonQuestions lesson={lesson} />}
+      {!createOnlyView && typeof history === "object" && (
+        <LessonHistory history={history} />
+      )}
     </div>
   );
 };

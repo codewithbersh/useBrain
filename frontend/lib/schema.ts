@@ -44,8 +44,9 @@ export const NicknameSchema = z.object({
   nickname: z
     .string()
     .trim()
-    .min(6, "Nickname must be at least 6 characters")
-    .max(16, "Nickname should not be more than 12 characters"),
+    .min(4, "Nickname must be at least 4 characters")
+    .max(12, "Nickname should not be more than 12 characters")
+    .regex(/^[a-z0-9]+$/i, "Nickname should only contain a-z and numbers"),
 });
 
 export const DeleteUserSchema = z.object({

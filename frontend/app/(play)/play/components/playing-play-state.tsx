@@ -7,14 +7,14 @@ import { usePlayState } from "@/hooks/use-play-state";
 import { useExitGameModal } from "@/hooks/use-exit-game-modal";
 import { shuffleArray } from "@/lib/shuffle-array";
 import { Lesson, Question } from "@/types";
-
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Icons } from "@/components/icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { newHistory } from "@/lib/history";
 import { Session } from "next-auth/core/types";
 import { useNewHistory } from "@/hooks/use-new-history";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Icons } from "@/components/icons";
 
 interface PlayingPlayStateProps {
   lesson: Lesson;
@@ -93,6 +93,7 @@ const PlayingPlayState = ({ lesson, session }: PlayingPlayStateProps) => {
         history: history,
         accessToken: session.user.accessToken,
       });
+      queryClient.invalidateQueries({ queryKey: ["my-history"] });
       setPlayState("gameOver");
     }
   };

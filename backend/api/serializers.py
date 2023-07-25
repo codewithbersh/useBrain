@@ -46,6 +46,24 @@ class LessonSerializer(ModelSerializer):
 
 
 class HistorySerializer(ModelSerializer):
+    player = UserSerializer()
+
+    class Meta:
+        model = History
+        fields = "__all__"
+        depth = 1
+
+
+class MyHistorySerliazer(ModelSerializer):
+    player = UserSerializer()
+
+    class Meta:
+        model = History
+        fields = "__all__"
+        depth = 1
+
+
+class NewHistorySerializer(ModelSerializer):
     class Meta:
         model = History
         fields = "__all__"

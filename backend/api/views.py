@@ -9,6 +9,8 @@ from .serializers import (
     QuestionSerializer,
     ChoiceSerializer,
     HistorySerializer,
+    MyHistorySerliazer,
+    NewHistorySerializer,
 )
 from rest_framework.response import Response
 from rest_framework import exceptions
@@ -117,16 +119,23 @@ class HistoryViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = History.objects.all()
-        user = self.request.user
-
-        my_history = self.request.query_params.get("my_history", None)
         lesson_id = self.request.query_params.get("lesson_id", None)
 
-        if my_history is not None and lesson_id is not None:
-            return queryset.filter(player=user, lesson__id=lesson_id)
         if lesson_id is not None:
             return queryset.filter(lesson__id=lesson_id)
-        if my_history is not None:
-            return queryset.filter(player=user)
 
         return queryset
+
+
+class MyHistoryViewSet(ModelViewSet):
+    serializer_class = MyHistorySerliazer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return History.objects.filter(player=user).order_by("-date_played")
+
+
+class NewHistoryViewSet(ModelViewSet):
+    queryset = History.objects.all()
+    serializer_class = NewHistorySerializer
