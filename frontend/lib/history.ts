@@ -58,6 +58,7 @@ export const getLessonHistory = async ({ lessonId }: GetLessonHistoryProps) => {
 };
 
 export const getMyHistory = async (accessToken: string) => {
+  console.log(process.env.BACKEND_URL);
   try {
     const { data } = await axiosApi.get<MyHistory[]>("my-history/", {
       headers: {
