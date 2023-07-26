@@ -16,7 +16,7 @@ export default async function HomeLayout({
   return (
     <section className="min-h-screen flex flex-col justify-between">
       <header>
-        <div className="flex items-center justify-between container py-8">
+        <div className="flex items-center justify-between container pt-8">
           <Link href="/" className="flex items-center gap-2">
             <Icons.logo size={48} />
             <h1 className="font-bold text-2xl">useBrain</h1>
@@ -42,7 +42,7 @@ export default async function HomeLayout({
         <div>{children}</div>
       </header>
       <footer className="w-full container py-4">
-        <p className="min-[431px]:text-center">
+        <p className="min-[413px]:text-center">
           <span>
             Backend service deployed on{" "}
             <Link
