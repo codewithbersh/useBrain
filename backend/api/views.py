@@ -16,10 +16,11 @@ from rest_framework.response import Response
 from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView
 
 
 class UserViewSet(ModelViewSet):
+    # queryset = User.objects.all()
     serializer_class = UserSerializer
 
     def get_queryset(self):
@@ -56,7 +57,6 @@ class LessonViewSet(ModelViewSet):
 class QuestionViewSet(ModelViewSet):
     queryset = Question.objects.all()
     serializer_class = QuestionSerializer
-    # permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         question_data = request.data
@@ -139,3 +139,22 @@ class MyHistoryViewSet(ModelViewSet):
 class NewHistoryViewSet(ModelViewSet):
     queryset = History.objects.all()
     serializer_class = NewHistorySerializer
+
+    def create(self, request, *args, **kwargs):
+        if isinstance(request.data, list):
+            serializer = self.get_serializer(data=request.data, many=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class InitializeBackendViewSet(APIView):
+    def get(self, request, format=None):
+        return Response(True)

@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { cn } from "@/lib/utils";
 import { Balancer } from "react-wrap-balancer";
-import GeniusImage from "@/public/genius.svg";
+import StudentInTheClassroom from "@/public/student-in-the-classroom.svg";
 
 import { buttonVariants } from "@/components/ui/button";
 
@@ -19,11 +19,9 @@ const HomePage = async () => {
               Welcome to useBrain — Engage Your Mind with Fun Quizzes.
             </Balancer>
           </h1>
-          <p className="text-muted-foreground min-[431px]:text-lg min-[431px]:text-center max-w-prose mx-auto">
-            <Balancer>
-              Explore, Play, and Create Lessons. Test your knowledge or share
-              your expertise with the world!
-            </Balancer>
+          <p className="text-muted-foreground min-[431px]:text-lg min-[431px]:text-center max-w-[500px] mx-auto">
+            Explore, Play, and Create Lessons. Test your knowledge or share your
+            expertise with the world!
           </p>
         </div>
 
@@ -40,8 +38,8 @@ const HomePage = async () => {
           </Link>
         )}
       </div>
-      <div className="max-w-[400px] mx-auto">
-        <Image src={GeniusImage} alt="Genius Image" />
+      <div className="max-w-[250px] min-[431px]:max-w-[400px] min-[431px]:mx-auto">
+        <Image src={StudentInTheClassroom} alt="Genius Image" />
       </div>
     </div>
   );

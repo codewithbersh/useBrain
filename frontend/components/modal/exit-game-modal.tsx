@@ -21,7 +21,7 @@ const ExitGameModal = () => {
       onClose={onClose}
       isOpen={isOpen}
     >
-      <DialogFooter>
+      <DialogFooter className="gap-2">
         <Button variant="outline" onClick={onClose}>
           Cancel
         </Button>

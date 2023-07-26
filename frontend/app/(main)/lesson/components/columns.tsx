@@ -61,13 +61,10 @@ export const columns: ColumnDef<MyHistory>[] = [
   {
     header: "Percentage",
     cell: ({ row }) => {
-      return (
-        <div className="font-bold">
-          {(row.original.total_correct_answers / row.original.total_questions) *
-            100}
-          %
-        </div>
-      );
+      const percentage =
+        (row.original.total_correct_answers / row.original.total_questions) *
+        100;
+      return <div className="font-bold">{percentage.toFixed(2)}%</div>;
     },
   },
 

@@ -19,7 +19,7 @@ const MyHistory = ({ initialData, accessToken }: MyHistoryProps) => {
   });
   if (!history) return null;
   return (
-    <div className="overflow-x-hidden">
+    <div className="">
       <DataTable data={history} columns={columns} />
     </div>
   );

@@ -14,7 +14,7 @@ export default async function HomeLayout({
   const session = await getServerSession(authOptions);
 
   return (
-    <section>
+    <section className="min-h-screen flex flex-col justify-between">
       <header>
         <div className="flex items-center justify-between container py-8">
           <Link href="/" className="flex items-center gap-2">
@@ -39,8 +39,56 @@ export default async function HomeLayout({
             )}
           </nav>
         </div>
+        <div>{children}</div>
       </header>
-      <div>{children}</div>
+      <footer className="w-full container py-4">
+        <p className="min-[431px]:text-center">
+          <span>
+            Backend service deployed on{" "}
+            <Link
+              href="https://render.com/"
+              className="underline"
+              target="_blank"
+            >
+              Render
+            </Link>
+            .{" "}
+          </span>
+          <span>
+            Frontend service deployed on{" "}
+            <Link
+              href="https://vercel.com/"
+              className="underline"
+              target="_blank"
+            >
+              Vercel
+            </Link>
+            .{" "}
+          </span>
+          <span>
+            Visit code on{" "}
+            <Link
+              href="https://github.com/codewithbersh/online-learning-platform"
+              className="underline"
+              target="_blank"
+            >
+              Github
+            </Link>
+            .{" "}
+          </span>
+          <span>
+            Illustrations by{" "}
+            <Link
+              href="https://popsy.co/illustrations"
+              className="underline"
+              target="_blank"
+            >
+              Popsy
+            </Link>
+            .
+          </span>
+        </p>
+      </footer>
     </section>
   );
 }

@@ -4,8 +4,17 @@ import { signIn } from "next-auth/react";
 
 import { Icons } from "@/components/icons";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const LoginButton = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const handleCredentialLogin = () => {
+    signIn("credentials", {
+      redirect: true,
+      callbackUrl: "/dashboard",
+    });
+    setIsLoading(true);
+  };
   return (
     <div className="w-[300px] mx-auto space-y-12">
       <div className="flex gap-4 flex-col justify-center items-center text-center">
@@ -79,14 +88,15 @@ const LoginButton = () => {
         <Button
           variant="outline"
           className="w-full gap-2"
-          onClick={() =>
-            signIn("credentials", {
-              redirect: true,
-              callbackUrl: "/dashboard",
-            })
-          }
+          onClick={() => handleCredentialLogin()}
         >
-          Continue as Guest
+          {isLoading ? (
+            <>
+              <Icons.loader className="animate-spin" size={14} /> Logging in
+            </>
+          ) : (
+            "Continue as Guest"
+          )}
         </Button>
       </div>
     </div>

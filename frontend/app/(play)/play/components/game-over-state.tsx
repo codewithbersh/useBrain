@@ -62,7 +62,7 @@ const GameOverState = ({ lesson }: GameOverStateProps) => {
             Game Over
           </h1>
           <div className="text-center">
-            <h1 className="text-5xl font-bold">{points}</h1>
+            <h1 className="text-5xl font-bold">{points.toFixed(2)}</h1>
             <small>points</small>
           </div>
         </div>

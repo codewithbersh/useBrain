@@ -26,7 +26,7 @@ export const deleteLessonSchema = z.object({
 });
 
 const ChoiceSchema = z.object({
-  choice_text: z.string().nonempty("Required").trim().min(1).max(24),
+  choice_text: z.string().nonempty("Required").trim().min(1).max(48),
   is_correct: z.coerce.boolean(),
 });
 

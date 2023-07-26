@@ -36,11 +36,7 @@ export const columns: ColumnDef<MyHistory>[] = [
     accessorKey: "lesson.title",
     header: "Lesson",
     cell: ({ row }) => {
-      return (
-        <div className="line-clamp-2 min-w-[150px]">
-          {row.original.lesson.title}
-        </div>
-      );
+      return <div className="">{row.original.lesson.title}</div>;
     },
   },
   {
@@ -68,13 +64,10 @@ export const columns: ColumnDef<MyHistory>[] = [
   {
     header: "Percentage",
     cell: ({ row }) => {
-      return (
-        <div className="font-bold">
-          {(row.original.total_correct_answers / row.original.total_questions) *
-            100}
-          %
-        </div>
-      );
+      const percentage =
+        (row.original.total_correct_answers / row.original.total_questions) *
+        100;
+      return <div className="font-bold">{percentage.toFixed(2)}%</div>;
     },
   },
 
@@ -87,7 +80,6 @@ export const columns: ColumnDef<MyHistory>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>

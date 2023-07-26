@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth";
 import { cn } from "@/lib/utils";
 import { authOptions } from "@/lib/auth";
+import { initializeBackend } from "@/lib/axios-api";
 
 import { Icons } from "@/components/icons";
 import { buttonVariants } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import { LoginButton } from "@/components/login-button";
 
 const SignInPage = async () => {
   const session = await getServerSession(authOptions);
+  const isBackendRunning = await initializeBackend();
   if (session) redirect("/dashboard");
   return (
     <div className="relative min-h-screen min-w-screen">

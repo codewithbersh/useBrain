@@ -1,4 +1,5 @@
 from rest_framework.routers import DefaultRouter
+from django.urls import path, include
 
 from .views import (
     UserViewSet,
@@ -7,6 +8,7 @@ from .views import (
     HistoryViewSet,
     MyHistoryViewSet,
     NewHistoryViewSet,
+    InitializeBackendViewSet,
 )
 
 
@@ -18,4 +20,7 @@ router.register(r"history", HistoryViewSet, basename="history")
 router.register(r"my-history", MyHistoryViewSet, basename="my-history")
 router.register(r"new-history", NewHistoryViewSet, basename="new-history")
 
-urlpatterns = router.urls
+urlpatterns = [
+    path("", include(router.urls)),
+    path("init/", InitializeBackendViewSet.as_view(), name="init-backend"),
+]

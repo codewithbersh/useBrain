@@ -29,6 +29,8 @@ interface DeleteUserModalProps {
 const DeleteUserModal = ({ session }: DeleteUserModalProps) => {
   const { onClose, isOpen } = useDeleteUserModal();
 
+  const isUserDemoAccount = session.user.email === process.env.DEMO_USER_EMAIL;
+
   const deleteUserMutation = useMutation({
     mutationFn: deleteUser,
     onSuccess: () => {
@@ -56,9 +58,16 @@ const DeleteUserModal = ({ session }: DeleteUserModalProps) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Are you sure you want to delete your account?"
-      description="This action cannot be undone. We will immediately delete all of your
-  account data."
+      title={
+        isUserDemoAccount
+          ? "Demo account cannot be deleted"
+          : "Are you sure you want to delete your account"
+      }
+      description={
+        isUserDemoAccount
+          ? "This is a demo account. Demo account cannot be deleted."
+          : "This action cannot be undone. We will immediately delete all of your account data."
+      }
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -76,20 +85,24 @@ const DeleteUserModal = ({ session }: DeleteUserModalProps) => {
                   below
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="delete my account" {...field} />
+                  <Input
+                    placeholder="delete my account"
+                    {...field}
+                    disabled={isUserDemoAccount}
+                  />
                 </FormControl>
               </FormItem>
             )}
           />
 
           <DialogFooter className="gap-y-2 sm:gap-y-0">
-            <Button type="reset" variant="outline">
+            <Button type="reset" variant="outline" onClick={onClose}>
               Cancel
             </Button>
             <Button
               type="submit"
               variant="destructive"
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid || isUserDemoAccount}
             >
               Delete account
             </Button>
