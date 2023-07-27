@@ -14,12 +14,13 @@ export default function Error({
   reset: () => void;
 }) {
   const router = useRouter();
-  const handleReload = () => {
-    window.location.reload();
+  const handleBackHome = () => {
+    router.push("/");
+    router.refresh();
   };
   return (
     <div className="container py-8 sm:py-12">
-      <div className="space-y-8">
+      <div className="flex gap-8 sm:items-center flex-col">
         <div className="max-w-[350px] sm:mx-auto">
           <Image src={Falling} alt="Falling Girl" />
         </div>
@@ -35,12 +36,13 @@ export default function Error({
             patience.
           </p>
         </div>
-        <div className="flex gap-4 sm:justify-center">
-          <Button variant="outline" onClick={() => router.push("/")}>
-            Back to home
-          </Button>
-          <Button onClick={() => handleReload()}>Try again</Button>
-        </div>
+        <Button
+          variant="outline"
+          onClick={() => handleBackHome()}
+          className="w-fit"
+        >
+          Back to home
+        </Button>
       </div>
     </div>
   );
