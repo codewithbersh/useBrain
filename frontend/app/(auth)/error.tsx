@@ -29,9 +29,12 @@ export default function Error({
             Oops, We're Just Warming Up!
           </h1>
           <p className="text-muted-foreground sm:text-lg max-w-prose sm:text-center sm:mx-auto">
-            Our free-tier backend services momentarily spin down during
-            inactivity and are now rebooting. This brief process, taking up to a
-            minute, helps optimize performance for a smoother user experience.
+            Our free-tier backend services momentarily and are{" "}
+            <span className="text-foreground">now rebooting</span>. This brief
+            process,{" "}
+            <span className="text-foreground">taking up to a minute</span>,
+            helps optimize performance for a{" "}
+            <span className="text-foreground">smoother user experience</span>.
             Please refresh the page shortly. Thanks for your understanding and
             patience.
           </p>
